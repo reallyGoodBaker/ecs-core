@@ -13,6 +13,7 @@ import top.rgb39.ecs.RuntimeSchedular;
 import top.rgb39.ecs.SystemChain;
 import top.rgb39.ecs.annotation.Component;
 import top.rgb39.ecs.component.ComponentFactory;
+import top.rgb39.ecs.loader.InternalScanner;
 import top.rgb39.ecs.util.Lists;
 import top.rgb39.ecs.util.Logger;
 
@@ -25,6 +26,11 @@ public class App implements EntityManager, ComponentManager, RuntimeManager, Sys
     private RuntimeChain runtimeChain;
 
     private App() {
+        try {
+            InternalScanner.scan("top/rgb39/ecs");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void defaultRuntimeChainInit() {
@@ -71,7 +77,7 @@ public class App implements EntityManager, ComponentManager, RuntimeManager, Sys
 
     @Override // top.yuumo.meisterhau.lib.arch.ComponentManager
     public Object[] getSingletonComponents() {
-        return this.singletonComponents.toArray();
+        return singletonComponents.toArray();
     }
 
     @Override // top.yuumo.meisterhau.lib.arch.ComponentManager
@@ -87,7 +93,7 @@ public class App implements EntityManager, ComponentManager, RuntimeManager, Sys
 
     @Override // top.yuumo.meisterhau.lib.arch.ComponentManager
     public Object getSingletonComponent(Class<?> componentClass) {
-        Object component = Lists.find(this.singletonComponents, c -> {
+        Object component = Lists.find(singletonComponents, c -> {
             Logger.info(c.getClass().getName());
             return c.getClass().equals(componentClass);
         });
@@ -95,7 +101,9 @@ public class App implements EntityManager, ComponentManager, RuntimeManager, Sys
             return component;
         }
         Object component2 = ComponentFactory.getComponent(componentClass);
-        this.singletonComponents.add(component2);
+        if (Objects.nonNull(component2)) {
+            singletonComponents.add(component2);
+        }
         return component2;
     }
 
@@ -121,7 +129,7 @@ public class App implements EntityManager, ComponentManager, RuntimeManager, Sys
             return c.getClass().equals(componentClass);
         });
         if (Objects.nonNull(component)) {
-            this.singletonComponents.remove(component);
+            singletonComponents.remove(component);
         }
         return this;
     }
@@ -279,7 +287,9 @@ public class App implements EntityManager, ComponentManager, RuntimeManager, Sys
 
     @Override
     public ComponentManager addSingleComponent(Object obj) {
-        singletonComponents.add(obj);
+        if (Objects.nonNull(obj)) {
+            singletonComponents.add(obj);
+        }
         return this;
     }
 }
