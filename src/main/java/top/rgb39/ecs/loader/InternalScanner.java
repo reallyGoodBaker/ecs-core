@@ -28,8 +28,8 @@ public class InternalScanner implements Scanner {
         }
     }
 
-    public static void scan(String... name) throws Exception {
-        for (String n : name) {
+    public static void scan(String... names) throws Exception {
+        for (String n : names) {
             scan(n);
         }
     }
