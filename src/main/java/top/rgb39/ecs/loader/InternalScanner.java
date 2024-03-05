@@ -8,9 +8,9 @@ import java.util.jar.JarFile;
 
 /* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/loader/InternalScanner.class */
 public class InternalScanner implements Scanner {
-    public static void scan() throws Exception {
+    public static void scan(String name) throws Exception {
         ClassLoader cl = InternalScanner.class.getClassLoader();
-        Enumeration<URL> urls = cl.getResources("top/rgb39/ecs");
+        Enumeration<URL> urls = cl.getResources(name);
         while (urls.hasMoreElements()) {
             URL jarFileURL = urls.nextElement();
             JarURLConnection urlConnection = (JarURLConnection) jarFileURL.openConnection();
@@ -25,6 +25,12 @@ public class InternalScanner implements Scanner {
                     classes.put(clazz.getName(), clazz);
                 }
             }
+        }
+    }
+
+    public static void scan(String... name) throws Exception {
+        for (String n : name) {
+            scan(n);
         }
     }
 }

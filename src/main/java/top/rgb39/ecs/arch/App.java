@@ -14,6 +14,7 @@ import top.rgb39.ecs.SystemChain;
 import top.rgb39.ecs.annotation.Component;
 import top.rgb39.ecs.component.ComponentFactory;
 import top.rgb39.ecs.util.Lists;
+import top.rgb39.ecs.util.Logger;
 
 /* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/arch/App.class */
 public class App implements EntityManager, ComponentManager, RuntimeManager, SystemManager {
@@ -87,6 +88,7 @@ public class App implements EntityManager, ComponentManager, RuntimeManager, Sys
     @Override // top.yuumo.meisterhau.lib.arch.ComponentManager
     public Object getSingletonComponent(Class<?> componentClass) {
         Object component = Lists.find(this.singletonComponents, c -> {
+            Logger.info(c.getClass().getName());
             return c.getClass().equals(componentClass);
         });
         if (Objects.nonNull(component)) {

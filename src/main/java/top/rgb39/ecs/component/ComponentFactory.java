@@ -12,6 +12,9 @@ public class ComponentFactory {
 
     public static Object getComponent(Class<?> componentClass) {
         Component annotation = (Component) componentClass.getAnnotation(Component.class);
+        if (Objects.isNull(annotation)) {
+            return null;
+        }
         if (annotation.singleton()) {
             return getSingletonComponent(componentClass);
         }
