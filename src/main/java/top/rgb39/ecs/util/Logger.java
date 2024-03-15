@@ -11,8 +11,17 @@ public class Logger {
     private static int backgroundColor = 40;
     private static Set<String> enabledLoggers = new HashSet<>();
 
-    public final static String DEBUG = "debug";
-    public final static String ECS = "ecs";
+    public final static Logger DEBUG = getLogger("debug");
+    public final static Logger ECS = getLogger("ecs");
+
+    private String loggerName;
+    private Logger(String loggerName) {
+        this.loggerName = loggerName;
+    }
+
+    public static Logger getLogger(String loggerName) {
+        return new Logger(loggerName);
+    }
 
     public interface BackgroundColors {
         public static final int BLACK = 40;
@@ -44,6 +53,14 @@ public class Logger {
         enabledLoggers.remove(name);
     }
 
+    public static void enableDebugger(Logger logger) {
+        enabledLoggers.add(logger.loggerName);
+    }
+
+    public static void disableDebugger(Logger logger) {
+        enabledLoggers.remove(logger.loggerName);
+    }
+
     public static void resetStyle() {
         fontColor = 37;
         backgroundColor = 40;
@@ -58,44 +75,86 @@ public class Logger {
         return enabledLoggers.contains(name);
     }
 
-    public static void write(String str, Object... args) {
-        if (isEnabled(ECS)) {
+    public static void write(String name, String str, Object... args) {
+        if (isEnabled(name)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor), Integer.valueOf(backgroundColor), args);
         }
     }
 
-    public static void write(int fontColor2, String str, Object... args) {
-        if (isEnabled(ECS)) {
+    public static void write(String name, int fontColor2, String str, Object... args) {
+        if (isEnabled(name)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor), args);
         }
     }
 
-    public static void write(int fontColor2, int backgroundColor2, String str, Object... args) {
-        if (isEnabled(ECS)) {
+    public static void write(String name, int fontColor2, int backgroundColor2, String str, Object... args) {
+        if (isEnabled(name)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor2), args);
         }
     }
 
-    public static void info(String str, Object... args) {
-        if (isEnabled(ECS)) {
+    public void write(String str, Object... args) {
+        if (isEnabled(loggerName)) {
+            out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor), Integer.valueOf(backgroundColor), args);
+        }
+    }
+
+    public void write(int fontColor2, String str, Object... args) {
+        if (isEnabled(loggerName)) {
+            out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor), args);
+        }
+    }
+
+    public void write(int fontColor2, int backgroundColor2, String str, Object... args) {
+        if (isEnabled(loggerName)) {
+            out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor2), args);
+        }
+    }
+
+    public static void info(String name, String str, Object... args) {
+        if (isEnabled(name)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor), Integer.valueOf(backgroundColor), args);
         }
     }
 
-    public static void info(int fontColor2, String str, Object... args) {
-        if (isEnabled(ECS)) {
+    public static void info(String name, int fontColor2, String str, Object... args) {
+        if (isEnabled(name)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor), args);
         }
     }
 
-    public static void info(int fontColor2, int backgroundColor2, String str, Object... args) {
-        if (isEnabled(ECS)) {
+    public static void info(String name, int fontColor2, int backgroundColor2, String str, Object... args) {
+        if (isEnabled(name)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor2), args);
         }
     }
 
-    public static void err(String str, Object... args) {
-        if (isEnabled(ECS)) {
+    public static void err(String name, String str, Object... args) {
+        if (isEnabled(name)) {
+            err.printf(str + "\n", args);
+        }
+    }
+
+    public void info(String str, Object... args) {
+        if (isEnabled(loggerName)) {
+            out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor), Integer.valueOf(backgroundColor), args);
+        }
+    }
+
+    public void info(int fontColor2, String str, Object... args) {
+        if (isEnabled(loggerName)) {
+            out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor), args);
+        }
+    }
+
+    public void info(int fontColor2, int backgroundColor2, String str, Object... args) {
+        if (isEnabled(loggerName)) {
+            out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor2), args);
+        }
+    }
+
+    public void err(String str, Object... args) {
+        if (isEnabled(loggerName)) {
             err.printf(str + "\n", args);
         }
     }

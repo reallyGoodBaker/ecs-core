@@ -10,6 +10,7 @@ public class Components {
         Components components = new Components();
         InternalScanner.scan("top.rgb39.ecs");
         SystemLoader.load(app);
+        Logger.enableDebugger(Logger.ECS);
         app.addSingleComponent(components);
 
         app.run();
@@ -25,6 +26,6 @@ public class Components {
     public void test(
         @Reflect(Components.class) Components components
     ) {
-        Logger.info(components.toString());
+        Logger.ECS.info(components.toString());
     }
 }
