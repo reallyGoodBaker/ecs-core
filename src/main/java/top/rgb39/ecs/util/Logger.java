@@ -1,16 +1,19 @@
 package top.rgb39.ecs.util;
 
 import java.io.PrintStream;
+import java.util.Set;
+import java.util.HashSet;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/Logger.class */
 public class Logger {
     private static final PrintStream out = System.out;
     private static final PrintStream err = System.out;
-    private static boolean debug = false;
     private static int fontColor = 37;
     private static int backgroundColor = 40;
+    private static Set<String> enabledLoggers = new HashSet<>();
 
-    /* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/Logger$BackgroundColors.class */
+    public final static String DEBUG = "debug";
+    public final static String ECS = "ecs";
+
     public interface BackgroundColors {
         public static final int BLACK = 40;
         public static final int RED = 41;
@@ -22,7 +25,6 @@ public class Logger {
         public static final int WHITE = 47;
     }
 
-    /* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/Logger$FontColors.class */
     public interface FontColors {
         public static final int BLACK = 30;
         public static final int RED = 31;
@@ -34,8 +36,12 @@ public class Logger {
         public static final int WHITE = 37;
     }
 
-    public static void setDebug(boolean enable) {
-        debug = enable;
+    public static void enableDebugger(String name) {
+        enabledLoggers.add(name);
+    }
+
+    public static void disableDebugger(String name) {
+        enabledLoggers.remove(name);
     }
 
     public static void resetStyle() {
@@ -48,44 +54,48 @@ public class Logger {
         backgroundColor = color2;
     }
 
+    private static Boolean isEnabled(String name) {
+        return enabledLoggers.contains(name);
+    }
+
     public static void write(String str, Object... args) {
-        if (debug) {
+        if (isEnabled(ECS)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor), Integer.valueOf(backgroundColor), args);
         }
     }
 
     public static void write(int fontColor2, String str, Object... args) {
-        if (debug) {
+        if (isEnabled(ECS)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor), args);
         }
     }
 
     public static void write(int fontColor2, int backgroundColor2, String str, Object... args) {
-        if (debug) {
+        if (isEnabled(ECS)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor2), args);
         }
     }
 
     public static void info(String str, Object... args) {
-        if (debug) {
+        if (isEnabled(ECS)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor), Integer.valueOf(backgroundColor), args);
         }
     }
 
     public static void info(int fontColor2, String str, Object... args) {
-        if (debug) {
+        if (isEnabled(ECS)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor), args);
         }
     }
 
     public static void info(int fontColor2, int backgroundColor2, String str, Object... args) {
-        if (debug) {
+        if (isEnabled(ECS)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor2), args);
         }
     }
 
     public static void err(String str, Object... args) {
-        if (debug) {
+        if (isEnabled(ECS)) {
             err.printf(str + "\n", args);
         }
     }
