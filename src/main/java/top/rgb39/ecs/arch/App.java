@@ -14,6 +14,7 @@ import top.rgb39.ecs.SystemChain;
 import top.rgb39.ecs.annotation.Component;
 import top.rgb39.ecs.component.ComponentFactory;
 import top.rgb39.ecs.loader.InternalScanner;
+import top.rgb39.ecs.loader.SystemLoader;
 import top.rgb39.ecs.util.Lists;
 
 /* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/arch/App.class */
@@ -27,6 +28,7 @@ public class App implements EntityManager, ComponentManager, RuntimeManager, Sys
     private App() {
         try {
             InternalScanner.scan("top/rgb39/ecs");
+            SystemLoader.load(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
