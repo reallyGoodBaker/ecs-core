@@ -33,7 +33,7 @@ public class ClassScanner implements Scanner {
                             .replace(".class", "")
                             .replace("/", ".");
 
-                        Logger.ECS.err("Loading class %s -> %s", root, className);
+                        java.lang.System.out.printf("Loading class %s -> %s\n", root, className);
 
                         try {
                             Class<?> clz = cl.loadClass(className);
