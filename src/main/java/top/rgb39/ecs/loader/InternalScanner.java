@@ -3,8 +3,6 @@ package top.rgb39.ecs.loader;
 import java.io.File;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -42,21 +40,33 @@ public class InternalScanner implements Scanner {
     }
 
     private static void loadFiles(URL fileUrl) throws Exception {
-        Files.walk(Path.of(fileUrl.toURI()), 10).forEach(file -> {
-            loadFile(file);
-        });
+        File f = new File(fileUrl.toURI());
+
+        if (!f.exists()) {
+            return;
+        }
+
+        if (f.isFile()) {
+            loadFile(f);
+            return;
+        }
+
+        if (f.isDirectory()) {
+            for (File file : f.listFiles()) {
+                loadFile(file);
+            }
+        }
     }
 
-    private static void loadFile(Path filePath) {
+    private static void loadFile(File file) {
         try {
-            File file = filePath.toFile();
             if (
                 file.exists() &&
                 file.isFile() &&
                 file.canRead() &&
-                filePath.toString().endsWith(".class")
+                file.toString().endsWith(".class")
             ) {
-                System.out.println(filePath);
+                System.out.println(file);
             }
         } catch (Exception e) {
             throw e;
