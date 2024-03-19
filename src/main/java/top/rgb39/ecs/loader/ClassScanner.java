@@ -9,10 +9,11 @@ import java.nio.file.*;
 
 public class ClassScanner implements Scanner {
 
+    static ClassLoader cl = Thread.currentThread().getContextClassLoader();
+
     public static void scan(Class<?> cls, String name) throws Exception {
-        Enumeration<URL> enums = cls.getClassLoader().getResources(name);
+        Enumeration<URL> enums = cl.getResources(name);
         String root = cls.getResource("/").getPath().substring(1);
-        ClassLoader cl = cls.getClassLoader();
 
         while (enums.hasMoreElements()) {
             URL url = enums.nextElement();
