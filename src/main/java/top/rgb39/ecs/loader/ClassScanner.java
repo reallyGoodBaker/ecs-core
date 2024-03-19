@@ -13,7 +13,6 @@ public class ClassScanner implements Scanner {
 
     public static void scan(String name) throws Exception {
         Enumeration<URL> enums = cl.getResources(name);
-        String root = cl.getResource("").getPath().substring(1);
 
         while (enums.hasMoreElements()) {
             URL url = enums.nextElement();
@@ -29,12 +28,18 @@ public class ClassScanner implements Scanner {
                     .filter(Files::isRegularFile)
                     .forEach(file -> {
                         String className = file.toString()
-                            .replace("\\", "/")
-                            .replace(root, "")
+                            .replace("\\", "/");
+
+                        int index = className.indexOf(name);
+                        if (index == -1) {
+                            return;
+                        }
+
+                        className = className.substring(index)
                             .replace(".class", "")
                             .replace("/", ".");
 
-                        java.lang.System.out.printf("Loading class %s -> %s\n", root, className);
+                        java.lang.System.out.printf("Loading class %s\n", className);
 
                         try {
                             Class<?> clz = cl.loadClass(className);
