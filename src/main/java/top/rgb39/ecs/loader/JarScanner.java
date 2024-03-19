@@ -7,6 +7,8 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import top.rgb39.ecs.util.Logger;
+
 /* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/loader/JarScanner.class */
 public class JarScanner implements Scanner {
     public static void scan(URL jarFileURL) throws Exception {
@@ -22,6 +24,7 @@ public class JarScanner implements Scanner {
                     Class<?> cls = ucl.loadClass(jarEntryName.replace("/", ".").replace(".class", ""));
                     classes.put(cls.getName(), cls);
                 } catch (Exception e) {
+                    Logger.ECS.info("%s", e);
                 }
             }
         }

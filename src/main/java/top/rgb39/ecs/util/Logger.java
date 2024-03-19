@@ -45,19 +45,19 @@ public class Logger {
         public static final int WHITE = 37;
     }
 
-    public static void enableDebugger(String name) {
+    public static void enableLogger(String name) {
         enabledLoggers.add(name);
     }
 
-    public static void disableDebugger(String name) {
+    public static void disableLogger(String name) {
         enabledLoggers.remove(name);
     }
 
-    public static void enableDebugger(Logger logger) {
+    public static void enableLogger(Logger logger) {
         enabledLoggers.add(logger.loggerName);
     }
 
-    public static void disableDebugger(Logger logger) {
+    public static void disableLogger(Logger logger) {
         enabledLoggers.remove(logger.loggerName);
     }
 

@@ -8,9 +8,9 @@ public class Components {
     public static void main(String[] args) throws Exception {
         App app = App.create();
         Components components = new Components();
-        InternalScanner.scan("top.rgb39.ecs");
+        InternalScanner.scan("top/rgb39/ecs");
         SystemLoader.load(app);
-        Logger.enableDebugger(Logger.ECS);
+        Logger.enableLogger(Logger.ECS);
         app.addSingleComponent(components);
 
         app.run();
