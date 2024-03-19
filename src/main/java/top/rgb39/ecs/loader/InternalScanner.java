@@ -2,6 +2,7 @@ package top.rgb39.ecs.loader;
 
 import java.io.File;
 import java.net.JarURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
@@ -14,14 +15,15 @@ public class InternalScanner implements Scanner {
         Enumeration<URL> urls = cl.getResources(name);
         while (urls.hasMoreElements()) {
             URL fileURL = urls.nextElement();
-            String filePath = fileURL.getFile();
+            URI fileUri = fileURL.toURI();
+            System.out.println(fileUri);
 
-            if (filePath.startsWith("file:")) {
+            if ("file".equals(fileUri.getScheme())) {
                 loadFiles(fileURL);
                 continue;
             }
 
-            if (filePath.startsWith("jar:")) {
+            if ("jar".equals(fileUri.getScheme())) {
                 JarURLConnection urlConnection = (JarURLConnection) fileURL.openConnection();
                 JarFile jarFile = urlConnection.getJarFile();
                 Enumeration<JarEntry> jarEntryEnumeration = jarFile.entries();
@@ -40,6 +42,7 @@ public class InternalScanner implements Scanner {
     }
 
     private static void loadFiles(URL fileUrl) throws Exception {
+        System.out.println(fileUrl.toURI());
         File f = new File(fileUrl.toURI());
 
         if (!f.exists()) {
