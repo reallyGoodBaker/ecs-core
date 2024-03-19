@@ -2,6 +2,9 @@ package top.rgb39.ecs.loader;
 
 import java.net.URL;
 import java.util.Enumeration;
+
+import top.rgb39.ecs.util.Logger;
+
 import java.nio.file.*;
 
 public class ClassScanner implements Scanner {
@@ -30,11 +33,13 @@ public class ClassScanner implements Scanner {
                             .replace(".class", "")
                             .replace("/", ".");
 
+                        Logger.ECS.info("Loading class %s -> %s", root, className);
+
                         try {
                             Class<?> clz = cl.loadClass(className);
                             classes.put(clz.getName(), clz);
                         } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
+                            Logger.ECS.err("%s", e);
                         }
                     });
             }
