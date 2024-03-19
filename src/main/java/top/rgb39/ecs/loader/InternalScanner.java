@@ -1,6 +1,5 @@
 package top.rgb39.ecs.loader;
 
-import java.io.File;
 import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -8,20 +7,14 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/loader/InternalScanner.class */
 public class InternalScanner implements Scanner {
+    private static ClassLoader cl = InternalScanner.class.getClassLoader();
+
     public static void scan(String name) throws Exception {
-        ClassLoader cl = InternalScanner.class.getClassLoader();
         Enumeration<URL> urls = cl.getResources(name);
         while (urls.hasMoreElements()) {
             URL fileURL = urls.nextElement();
             URI fileUri = fileURL.toURI();
-            System.out.println(fileUri);
-
-            if ("file".equals(fileUri.getScheme())) {
-                loadFiles(fileURL);
-                continue;
-            }
 
             if ("jar".equals(fileUri.getScheme())) {
                 JarURLConnection urlConnection = (JarURLConnection) fileURL.openConnection();
@@ -38,41 +31,6 @@ public class InternalScanner implements Scanner {
                 }
                 continue;
             }
-        }
-    }
-
-    private static void loadFiles(URL fileUrl) throws Exception {
-        System.out.println(fileUrl.toURI());
-        File f = new File(fileUrl.toURI());
-
-        if (!f.exists()) {
-            return;
-        }
-
-        if (f.isFile()) {
-            loadFile(f);
-            return;
-        }
-
-        if (f.isDirectory()) {
-            for (File file : f.listFiles()) {
-                loadFile(file);
-            }
-        }
-    }
-
-    private static void loadFile(File file) {
-        try {
-            if (
-                file.exists() &&
-                file.isFile() &&
-                file.canRead() &&
-                file.toString().endsWith(".class")
-            ) {
-                System.out.println(file);
-            }
-        } catch (Exception e) {
-            throw e;
         }
     }
 

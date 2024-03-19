@@ -7,7 +7,6 @@ import top.rgb39.ecs.arch.App;
 import top.rgb39.ecs.annotation.System;
 import top.rgb39.ecs.util.Systems;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/loader/SystemLoader.class */
 public class SystemLoader {
     public static void load(App app) {
         for (Class<?> cls : Scanner.classes.values()) {
