@@ -11,9 +11,9 @@ public class ClassScanner implements Scanner {
 
     static ClassLoader cl = Thread.currentThread().getContextClassLoader();
 
-    public static void scan(Class<?> cls, String name) throws Exception {
+    public static void scan(String name) throws Exception {
         Enumeration<URL> enums = cl.getResources(name);
-        String root = cls.getResource("/").getPath().substring(1);
+        String root = cl.getResource("").getPath().substring(1);
 
         while (enums.hasMoreElements()) {
             URL url = enums.nextElement();

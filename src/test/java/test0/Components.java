@@ -12,7 +12,7 @@ public class Components {
         Logger.enableLogger(Logger.ECS);
         App app = App.create();
         Components components = new Components();
-        ClassScanner.scan(Components.class, "test0");
+        ClassScanner.scan("test0");
         SystemLoader.load(app);
 
         app.addSingleComponent(components);
