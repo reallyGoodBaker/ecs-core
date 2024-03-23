@@ -45,7 +45,7 @@ public class ClassScanner implements Scanner {
                             Class<?> clz = cl.loadClass(className);
                             classes.put(clz.getName(), clz);
                         } catch (ClassNotFoundException e) {
-                            Logger.ECS.err("%s", e);
+                            Logger.ECS.e("%s", e);
                         }
                     });
             }

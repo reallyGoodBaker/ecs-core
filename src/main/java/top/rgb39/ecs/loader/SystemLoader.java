@@ -14,7 +14,7 @@ public class SystemLoader {
                 System sys = (System) method.getAnnotation(System.class);
                 if (!Objects.isNull(sys)) {
                     app.addSystem(method, sys.runtimeLabel());
-                    Logger.ECS.info(Logger.light(32), "system added: " + Systems.getFullName(method) + " (" + sys.runtimeLabel() + ")", new Object[0]);
+                    Logger.ECS.i(Logger.light(32), "system added: " + Systems.getFullName(method) + " (" + sys.runtimeLabel() + ")", new Object[0]);
                 }
             }
         }

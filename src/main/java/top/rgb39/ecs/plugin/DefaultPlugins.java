@@ -23,6 +23,7 @@ public class DefaultPlugins implements Plugin {
             new ClassScannerPlugin(names),
             new ParameterMatchers(),
             new RuntimePlugin(),
+            new Events(),
             new SystemLoaderPlugin()
         );
     }

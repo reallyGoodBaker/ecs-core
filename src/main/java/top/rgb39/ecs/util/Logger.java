@@ -93,19 +93,19 @@ public class Logger {
         }
     }
 
-    public void write(String str, Object... args) {
+    public void w(String str, Object... args) {
         if (isEnabled(loggerName)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor), Integer.valueOf(backgroundColor), args);
         }
     }
 
-    public void write(int fontColor2, String str, Object... args) {
+    public void w(int fontColor2, String str, Object... args) {
         if (isEnabled(loggerName)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor), args);
         }
     }
 
-    public void write(int fontColor2, int backgroundColor2, String str, Object... args) {
+    public void w(int fontColor2, int backgroundColor2, String str, Object... args) {
         if (isEnabled(loggerName)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor2), args);
         }
@@ -135,25 +135,25 @@ public class Logger {
         }
     }
 
-    public void info(String str, Object... args) {
+    public void i(String str, Object... args) {
         if (isEnabled(loggerName)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor), Integer.valueOf(backgroundColor), args);
         }
     }
 
-    public void info(int fontColor2, String str, Object... args) {
+    public void i(int fontColor2, String str, Object... args) {
         if (isEnabled(loggerName)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor), args);
         }
     }
 
-    public void info(int fontColor2, int backgroundColor2, String str, Object... args) {
+    public void i(int fontColor2, int backgroundColor2, String str, Object... args) {
         if (isEnabled(loggerName)) {
             out.printf("\u001b[%s;%sm" + str + "\u001b[0m\n", Integer.valueOf(fontColor2), Integer.valueOf(backgroundColor2), args);
         }
     }
 
-    public void err(String str, Object... args) {
+    public void e(String str, Object... args) {
         if (isEnabled(loggerName)) {
             err.printf(str + "\n", args);
         }

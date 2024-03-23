@@ -23,7 +23,7 @@ public class JarScanner implements Scanner {
                     Class<?> cls = ucl.loadClass(jarEntryName.replace("/", ".").replace(".class", ""));
                     classes.put(cls.getName(), cls);
                 } catch (Exception e) {
-                    Logger.ECS.info("%s", e);
+                    Logger.ECS.e("%s", e);
                 }
             }
         }

@@ -38,6 +38,7 @@ public class RuntimeChain {
     private CompletableFuture<Void> _scheduleOnce(String[] scheduleSeq, int index, CompletableFuture<?> lastFuture, App app) {
         return lastFuture.thenRun(() -> {
             currentSchedule = scheduleSeq[index];
+            System.out.println(currentSchedule);
             if (index < this.sysChains.size()) {
                 SystemChain sysChain = this.sysChains.get(scheduleSeq[index]);
                 CompletableFuture<Void> ftr = sysChain.run(app);

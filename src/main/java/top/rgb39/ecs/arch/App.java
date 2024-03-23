@@ -243,7 +243,7 @@ public class App implements
             public void run() {
                 if (pluginsReady()) {
                     runtimeManager.run(self);
-                    timer.cancel();
+                    cancel();
                 }
             }
         }, 0l, 500l);

@@ -79,10 +79,6 @@ public class ParameterImplementor {
 
     private static final List<ParameterMatcher> matchers = new ArrayList<>();
 
-    public static interface ParameterMatcher {
-        boolean match(List<Object> args, Parameter param, int argIndex, App app, @Nullable Long entityId);
-    }
-
     public static void registerMatcher(ParameterMatcher matcher) {
         matchers.add(matcher);
     }

@@ -92,14 +92,16 @@ public class RuntimePlugin implements RuntimeManager, Plugin {
     }
 
     public static class DefaultRuntimeScheduler implements RuntimeSchedular {
-        Timer timer = new Timer(true);
+        TimerTask task;
 
         private DefaultRuntimeScheduler() {}
 
         @Override
         public void schedule(final RuntimeChain chain, final App app) {
-            chain.getSystemChain(RuntimeLabel.Startup).runWithOnlyReflects(app);
-            this.timer.schedule(new TimerTask() {
+            chain.getSystemChain(RuntimeLabel.Startup)
+                .runWithOnlyReflects(app);
+
+            new Timer(true).schedule(task = new TimerTask() {
                 @Override
                 public void run() {
                     chain.scheduleOnce(app);
@@ -109,7 +111,7 @@ public class RuntimePlugin implements RuntimeManager, Plugin {
 
         @Override
         public void cancel() {
-            this.timer.cancel();
+            this.task.cancel();
         }
     }
 
