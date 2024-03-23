@@ -1,4 +1,4 @@
-package top.rgb39.ecs;
+package top.rgb39.ecs.executor;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -10,7 +10,6 @@ import top.rgb39.ecs.arch.Row;
 import top.rgb39.ecs.arch.Table;
 import top.rgb39.ecs.annotation.System;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/SystemChain.class */
 public class SystemChain {
     private boolean aborted;
     private List<Method> systems = new ArrayList<>();
@@ -19,7 +18,7 @@ public class SystemChain {
 
     public void runWithOnlyReflects(App app) {
         for (Method method : this.systems) {
-            ArgumentImplementor implementor = new ArgumentImplementor(method.getParameters());
+            ParameterImplementor implementor = new ParameterImplementor(method.getParameters());
             implementor.matchArgumentsOnlyReflect(app);
             try {
                 implementor.invoke(SystenInstanceRecord.getInstance(method.getDeclaringClass()), method);
@@ -47,7 +46,7 @@ public class SystemChain {
         }
         for (Row row : ((Table) Objects.requireNonNull(app.table)).getRows()) {
             Object rest = null;
-            ArgumentImplementor implementor = new ArgumentImplementor(system.getParameters());
+            ParameterImplementor implementor = new ParameterImplementor(system.getParameters());
             implementor.matchArguments(app, row.getRowId());
             try {
                 if (sysAnnotaion.asynchronous()) {

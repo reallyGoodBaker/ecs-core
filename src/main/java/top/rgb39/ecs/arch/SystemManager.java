@@ -2,23 +2,22 @@ package top.rgb39.ecs.arch;
 
 import java.lang.reflect.Method;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/arch/SystemManager.class */
 public interface SystemManager {
-    RuntimeManager addSystem(Method method, String str);
+    SystemManager addSystem(Method system, String runtimeLabel);
 
-    RuntimeManager addSystem(Method method);
+    SystemManager addSystem(Method system);
 
-    RuntimeManager removeSystem(Method method, String str);
+    SystemManager removeSystem(Method system, String runtimeLabel);
 
-    RuntimeManager removeSystem(Method method);
+    SystemManager removeSystem(Method system);
 
-    RuntimeManager removeSystems(String str);
+    SystemManager removeSystems(String runtimeLabel);
 
-    boolean replaceSystem(Method method, Method method2, String str);
+    boolean replaceSystem(Method system, Method old, String runtimeLabel);
 
-    boolean replaceSystem(Method method, Method method2);
+    boolean replaceSystem(Method system, Method old);
 
     Method[] getSystems();
 
-    Method[] getSystems(String str);
+    Method[] getSystems(String runtimeLabel);
 }

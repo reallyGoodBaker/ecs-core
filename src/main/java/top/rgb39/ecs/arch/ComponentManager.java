@@ -1,6 +1,5 @@
 package top.rgb39.ecs.arch;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/arch/ComponentManager.class */
 public interface ComponentManager {
     Object[] getComponents(long j);
 

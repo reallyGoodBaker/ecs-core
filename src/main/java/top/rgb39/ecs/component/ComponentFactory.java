@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Objects;
 import top.rgb39.ecs.annotation.Component;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/component/ComponentFactory.class */
 public class ComponentFactory {
     private static Map<Class<?>, Object> singletons = new HashMap<>();
 

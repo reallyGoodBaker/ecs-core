@@ -1,11 +1,11 @@
-package top.rgb39.ecs;
+package top.rgb39.ecs.executor;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+
 import top.rgb39.ecs.arch.App;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/RuntimeChain.class */
 public class RuntimeChain {
     private Map<String, SystemChain> sysChains = new HashMap<>();
 

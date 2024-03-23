@@ -1,6 +1,5 @@
 package top.rgb39.ecs.util;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/util/Arrays.class */
 public class Arrays {
     public static <T> String join(T[] tArr, String separator) {
         StringBuffer sb = new StringBuffer();

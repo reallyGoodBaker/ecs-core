@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/annotation/Component.class */
 public @interface Component {
     boolean singleton() default false;
 }

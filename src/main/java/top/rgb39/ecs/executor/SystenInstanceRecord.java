@@ -1,10 +1,9 @@
-package top.rgb39.ecs;
+package top.rgb39.ecs.executor;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/SystenInstanceRecord.class */
 public class SystenInstanceRecord {
     private static Map<Class<?>, Object> instRecord = new HashMap<>();
 

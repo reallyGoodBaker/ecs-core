@@ -3,7 +3,6 @@ package top.rgb39.ecs.arch;
 import java.util.LinkedList;
 import java.util.List;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/arch/Row.class */
 public class Row {
     private List<Object> row = new LinkedList<>();
     private long rowId;

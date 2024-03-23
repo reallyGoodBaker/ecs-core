@@ -6,7 +6,6 @@ import java.util.Objects;
 import top.rgb39.ecs.annotation.Component;
 import top.rgb39.ecs.util.Lists;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/arch/Table.class */
 public class Table {
     private List<Class<?>> headers = new LinkedList<>();
     private List<Row> table = new LinkedList<>();

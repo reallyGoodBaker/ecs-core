@@ -1,8 +1,7 @@
-package top.rgb39.ecs;
+package top.rgb39.ecs.executor;
 
 import top.rgb39.ecs.arch.App;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/RuntimeSchedular.class */
 public interface RuntimeSchedular {
     void schedule(RuntimeChain runtimeChain, App app);
 

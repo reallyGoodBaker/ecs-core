@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/annotation/AppReflect.class */
 public @interface Reflect {
     Class<?> value();
 }

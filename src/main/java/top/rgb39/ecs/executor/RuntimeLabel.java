@@ -1,6 +1,5 @@
-package top.rgb39.ecs;
+package top.rgb39.ecs.executor;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/RuntimeLabel.class */
 public interface RuntimeLabel {
     public static final String Startup = "$$Startup";
     public static final String Event = "$$Event";

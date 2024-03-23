@@ -9,7 +9,6 @@ import java.util.jar.JarFile;
 
 import top.rgb39.ecs.util.Logger;
 
-/* loaded from: meisterhau-lib.jar:top/yuumo/meisterhau/lib/ecs/loader/JarScanner.class */
 public class JarScanner implements Scanner {
     public static void scan(URL jarFileURL) throws Exception {
         URLClassLoader ucl = new URLClassLoader(new URL[]{jarFileURL});
