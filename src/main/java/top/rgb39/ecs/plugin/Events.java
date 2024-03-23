@@ -15,7 +15,6 @@ import top.rgb39.ecs.arch.App;
 import top.rgb39.ecs.arch.Event;
 import top.rgb39.ecs.executor.ParameterImplementor;
 import top.rgb39.ecs.executor.ParameterMatcher;
-import top.rgb39.ecs.executor.RuntimeLabel;
 
 public class Events implements Plugin, ParameterMatcher {
 
@@ -36,7 +35,8 @@ public class Events implements Plugin, ParameterMatcher {
         }
 
         if (Objects.nonNull(param.getAnnotation(Write.class))) {
-            return matchWriter(args, argIndex, app);
+            matchWriter(args, argIndex, app);
+            return true;
         }
 
         return false;
@@ -61,9 +61,6 @@ public class Events implements Plugin, ParameterMatcher {
     }
 
     private boolean matchWriter(List<Object> args, int argIndex, App app) {
-        if (!RuntimeLabel.Event.equals(app.getRuntimeManager().currentRuntimeLabel()))
-            return false;
-
         EventWriter writer = new EventWriterImpl(events);
         args.set(argIndex, writer);
         return true;

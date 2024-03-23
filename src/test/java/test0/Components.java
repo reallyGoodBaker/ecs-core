@@ -10,7 +10,7 @@ import top.rgb39.ecs.annotation.System;;
 public class Components {
     public static void main(String[] args) throws Exception {
         Logger.enableLogger(Logger.ECS);
-        App.create("test0")
+        App.create("test0/Components.class")
             .addSingleComponent(new Components())
             .addEntity(0, new Counter())
             .run();

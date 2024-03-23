@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import top.rgb39.ecs.arch.Event;
 
-@Target(ElementType.TYPE)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Read {
     Class<? extends Event> value();
