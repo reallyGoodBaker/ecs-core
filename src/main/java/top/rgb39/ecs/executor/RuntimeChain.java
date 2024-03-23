@@ -8,6 +8,7 @@ import top.rgb39.ecs.arch.App;
 
 public class RuntimeChain {
     private Map<String, SystemChain> sysChains = new HashMap<>();
+    private String currentSchedule = null;
 
     public void setSystemChain(String runtimeLabel, SystemChain sysChain) {
         this.sysChains.put(runtimeLabel, sysChain);
@@ -36,6 +37,7 @@ public class RuntimeChain {
 
     private CompletableFuture<Void> _scheduleOnce(String[] scheduleSeq, int index, CompletableFuture<?> lastFuture, App app) {
         return lastFuture.thenRun(() -> {
+            currentSchedule = scheduleSeq[index];
             if (index < this.sysChains.size()) {
                 SystemChain sysChain = this.sysChains.get(scheduleSeq[index]);
                 CompletableFuture<Void> ftr = sysChain.run(app);
@@ -44,5 +46,9 @@ public class RuntimeChain {
                 });
             }
         });
+    }
+
+    public String current() {
+        return currentSchedule;
     }
 }

@@ -113,4 +113,9 @@ public class RuntimePlugin implements RuntimeManager, Plugin {
         }
     }
 
+    @Override
+    public String currentRuntimeLabel() {
+        return runtimeChain.current();
+    }
+
 }

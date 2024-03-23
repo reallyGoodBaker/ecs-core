@@ -12,4 +12,5 @@ public interface RuntimeManager {
     RuntimeChain getRuntimeChain();
     SystemChain getSystemChain(String str);
     RuntimeManager setSystemChain(String str, SystemChain systemChain);
+    String currentRuntimeLabel();
 }
