@@ -13,10 +13,7 @@ import top.rgb39.ecs.util.Logger.FontColors;
 import top.rgb39.ecs.annotation.System;
 
 public class SystemChain {
-    private boolean aborted;
     private List<Method> systems = new ArrayList<>();
-    private int index = 0;
-    private int completed = 0;
 
     public void runWithOnlyReflects(App app) {
         for (Method method : this.systems) {
@@ -30,77 +27,34 @@ public class SystemChain {
         }
     }
 
-    public void next(App app) {
-        Object invoke;
-        if (this.index < 0 || this.index >= this.systems.size()) {
-            this.aborted = true;
-        }
-        if (this.aborted) {
-            return;
-        }
-        List<Method> list = this.systems;
-        int i = this.index;
-        this.index = i + 1;
-        Method system = list.get(i);
-        System sysAnnotaion = (System) system.getAnnotation(System.class);
-        if (Objects.isNull(sysAnnotaion) || Objects.isNull(app.table)) {
-            return;
-        }
-        for (Row row : ((Table) Objects.requireNonNull(app.table)).getRows()) {
-            Object rest = null;
-            ParameterImplementor implementor = new ParameterImplementor(system.getParameters());
-            implementor.matchArguments(app, row.getRowId());
-            try {
-                if (sysAnnotaion.asynchronous()) {
-                    invoke = CompletableFuture.supplyAsync(() -> {
-                        try {
-                            return implementor.invoke(SystenInstanceRecord.getInstance(system.getDeclaringClass()), system);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            return null;
-                        }
-                    });
-                } else {
-                    invoke = implementor.invoke(SystenInstanceRecord.getInstance(system.getDeclaringClass()), system);
+    public void run(App app) {
+        for (Method system : this.systems) {
+            System sysAnnotaion = (System) system.getAnnotation(System.class);
+            if (Objects.isNull(sysAnnotaion) || Objects.isNull(app.table)) {
+                return;
+            }
+            for (Row row : ((Table) Objects.requireNonNull(app.table)).getRows()) {
+                ParameterImplementor implementor = new ParameterImplementor(system.getParameters());
+                implementor.matchArguments(app, row.getRowId());
+                try {
+                    if (sysAnnotaion.asynchronous()) {
+                        CompletableFuture.supplyAsync(() -> {
+                            try {
+                                return implementor.invoke(SystenInstanceRecord.getInstance(system.getDeclaringClass()), system);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                return null;
+                            }
+                        });
+                    } else {
+                        implementor.invoke(SystenInstanceRecord.getInstance(system.getDeclaringClass()), system);
+                    }
+                    Logger.info("tick", FontColors.GREEN, "system: " + system.getName());
+                } catch (Exception e) {
+                    Logger.info("tick", FontColors.RED, "system failed: " + system.getName());
                 }
-                Logger.info("tick", FontColors.GREEN, "system: " + system.getName());
-                rest = invoke;
-            } catch (Exception e) {
-                Logger.info("tick", FontColors.RED, "system failed: " + system.getName());
-                next(app);
-            }
-            if (rest instanceof CompletableFuture) {
-                this.completed++;
-                ((CompletableFuture<?>) rest).thenRun(() -> {
-                    this.completed--;
-                });
             }
         }
-    }
-
-    public void stop() {
-        this.aborted = true;
-    }
-
-    public CompletableFuture<Void> run(App app) {
-        return CompletableFuture.runAsync(() -> {
-            while (!isFinished()) {
-                next(app);
-            }
-            restore();
-        });
-    }
-
-    public boolean isAborted() {
-        return this.aborted;
-    }
-
-    public boolean isCompleted() {
-        return this.completed == 0 && this.index == this.systems.size();
-    }
-
-    public boolean isFinished() {
-        return isAborted() || isCompleted();
     }
 
     public void addSystem(Method system) {
@@ -128,9 +82,4 @@ public class SystemChain {
         return (Method[]) this.systems.toArray(new Method[0]);
     }
 
-    public void restore() {
-        this.index = 0;
-        this.aborted = false;
-        this.completed = 0;
-    }
 }
