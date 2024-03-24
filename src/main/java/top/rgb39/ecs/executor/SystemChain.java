@@ -8,6 +8,8 @@ import java.util.concurrent.CompletableFuture;
 import top.rgb39.ecs.arch.App;
 import top.rgb39.ecs.arch.Row;
 import top.rgb39.ecs.arch.Table;
+import top.rgb39.ecs.util.Logger;
+import top.rgb39.ecs.util.Logger.FontColors;
 import top.rgb39.ecs.annotation.System;
 
 public class SystemChain {
@@ -61,8 +63,10 @@ public class SystemChain {
                 } else {
                     invoke = implementor.invoke(SystenInstanceRecord.getInstance(system.getDeclaringClass()), system);
                 }
+                Logger.info("tick", FontColors.GREEN, "system: " + system.getName());
                 rest = invoke;
             } catch (Exception e) {
+                Logger.info("tick", FontColors.RED, "system failed: " + system.getName());
                 next(app);
             }
             if (rest instanceof CompletableFuture) {
