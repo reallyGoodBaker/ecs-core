@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import top.rgb39.ecs.arch.App;
+import top.rgb39.ecs.util.Logger;
+import top.rgb39.ecs.util.Logger.FontColors;
 
 public class RuntimeChain {
     private Map<String, SystemChain> sysChains = new HashMap<>();
@@ -31,8 +33,12 @@ public class RuntimeChain {
     }
 
     public CompletableFuture<Void> scheduleOnce(App app) {
+        Logger.info("tick",FontColors.CYAN,  "schedule start");
         CompletableFuture<?> ftr = CompletableFuture.runAsync(() -> {});
-        return _scheduleOnce(getScheduleSequence(), 0, ftr, app);
+        CompletableFuture<Void> future = _scheduleOnce(getScheduleSequence(), 0, ftr, app).thenRun(() -> {
+            Logger.info("tick",FontColors.YELLOW,  "schedule end");
+        });
+        return future;
     }
 
     private CompletableFuture<Void> _scheduleOnce(String[] scheduleSeq, int index, CompletableFuture<?> lastFuture, App app) {

@@ -15,6 +15,7 @@ import top.rgb39.ecs.util.Logger;
 public class EventTest {
     public static void main(String[] args) {
         Logger.enableLogger(Logger.DEBUG);
+        Logger.enableLogger("tick");
         App app = App.create("test0/EventTest.class");
 
         app.addEntity(0, new State())
