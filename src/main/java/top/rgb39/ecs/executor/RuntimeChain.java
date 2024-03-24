@@ -50,6 +50,8 @@ public class RuntimeChain {
                 ftr.thenRun(() -> {
                     _scheduleOnce(scheduleSeq, index + 1, ftr, app);
                 });
+            } else {
+                lastFuture.complete(null);
             }
         });
     }
