@@ -52,9 +52,10 @@ public class ParameterImplementor {
             Parameter param = this.params[i];
             for (ParameterMatcher matcher : matchers) {
                 if (matcher.match(args, param, i, app, entityId)) {
-                    i++;
+                    break;
                 }
             }
+            i++;
         }
         return this;
     }
