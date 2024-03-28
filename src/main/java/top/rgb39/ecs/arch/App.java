@@ -30,6 +30,11 @@ public class App implements
 
     @Override
     public App addEntity(long entityId, Object... components) {
+        if (components.length < 1) {
+            ((Table) Objects.requireNonNull(this.table)).createRow(entityId);
+            return this;
+        }
+
         for (Object obj : components) {
             ((Table) Objects.requireNonNull(this.table)).setCell(obj.getClass(), entityId, obj);
         }
