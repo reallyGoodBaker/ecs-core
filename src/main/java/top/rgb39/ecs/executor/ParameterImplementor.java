@@ -13,28 +13,29 @@ import top.rgb39.ecs.annotation.Reflect;
 
 public class ParameterImplementor {
     private final Parameter[] params;
-    private Object[] args;
+    private final List<Object> args;
     private static final Object EMPTY = new Object();
 
     public ParameterImplementor(Parameter[] params) {
         this.params = params;
-        args = new Object[params.length];
-        Arrays.fill(args, EMPTY);
+        Object[] _args = new Object[params.length];
+        Arrays.fill(_args, EMPTY);
+        this.args = Arrays.asList(_args);
     }
 
     public void set(int index, Object value) {
-        args[index] = value;
+        this.args.set(index, value);
     }
 
     public Object get(int index) {
-        return args[index];
+        return this.args.get(index);
     }
 
     public Object invoke(Object target, Method method) throws Exception {
-        if (Arrays.asList(args).contains(EMPTY)) {
+        if (this.args.contains(EMPTY)) {
             return null;
         }
-        return method.invoke(target, args.clone());
+        return method.invoke(target, this.args.toArray());
     }
 
     public ParameterImplementor matchArgumentsOnlyReflect(App app) {
@@ -50,7 +51,7 @@ public class ParameterImplementor {
         while (i < this.params.length) {
             Parameter param = this.params[i];
             for (ParameterMatcher matcher : matchers) {
-                if (matcher.match(Arrays.asList(args), param, i, app, entityId)) {
+                if (matcher.match(args, param, i, app, entityId)) {
                     i++;
                 }
             }
@@ -58,7 +59,7 @@ public class ParameterImplementor {
         return this;
     }
 
-    private boolean matchReflects(Object[] args, Parameter param, int index, App app, @Nullable Long entityId) {
+    private boolean matchReflects(List<Object> args, Parameter param, int index, App app, @Nullable Long entityId) {
         Reflect reflect = (Reflect) param.getAnnotation(Reflect.class);
         
         if (Objects.isNull(reflect)) {
@@ -69,7 +70,7 @@ public class ParameterImplementor {
         Object target = app.getSingletonComponent(targetClass);
 
         if (Objects.nonNull(target)) {
-            args[index] = target;
+            args.set(index, target);
             return true;
         }
 
