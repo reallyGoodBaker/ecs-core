@@ -2,6 +2,7 @@ package test0;
 
 import java.util.List;
 import top.rgb39.ecs.annotation.Component;
+import top.rgb39.ecs.annotation.Entity;
 import top.rgb39.ecs.annotation.Read;
 import top.rgb39.ecs.annotation.Slot;
 import top.rgb39.ecs.annotation.System;
@@ -35,6 +36,7 @@ public class EventTest {
 
     @System
     void test2(
+        @Entity long id,
         @Read(MyEvent.class) List<MyEvent> events
     ) {
         Logger.DEBUG.i("size: " + events.size());

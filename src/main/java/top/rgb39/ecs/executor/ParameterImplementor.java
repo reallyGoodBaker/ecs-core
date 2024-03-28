@@ -47,16 +47,15 @@ public class ParameterImplementor {
     }
 
     public ParameterImplementor matchArguments(App app, long entityId) {
-        int i = 0;
-        while (i < this.params.length) {
+        for (int i = 0; i < params.length; i++) {
             Parameter param = this.params[i];
             for (ParameterMatcher matcher : matchers) {
                 if (matcher.match(args, param, i, app, entityId)) {
                     break;
                 }
             }
-            i++;
         }
+
         return this;
     }
 
