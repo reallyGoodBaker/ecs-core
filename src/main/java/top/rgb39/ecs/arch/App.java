@@ -175,6 +175,7 @@ public class App implements
 
     public static App create(String... names) {
         App app = new App();
+        app.addSingleComponent(app);
         app.addPlugins(new DefaultPlugins(names));
         return app;
     }

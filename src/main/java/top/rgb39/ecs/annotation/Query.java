@@ -8,4 +8,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Query {
+    Class<?>[] value();
+    Class<?>[] with() default {};
+    Class<?>[] without() default {};
 }

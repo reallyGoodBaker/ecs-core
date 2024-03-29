@@ -1,10 +1,13 @@
 package top.rgb39.ecs.plugin;
 
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-
-import javax.annotation.Nullable;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import top.rgb39.ecs.annotation.Entity;
 import top.rgb39.ecs.annotation.Query;
@@ -23,14 +26,49 @@ public class ParameterMatchers implements Plugin {
         );
     }
 
-    // TODO
-    private boolean matchQuery(List<Object> args, Parameter param, int index, App app, @Nullable Long entityId) {
+    private boolean matchQuery(List<Object> args, Parameter param, int index, App app, Long entityId) {
         Query query = (Query) param.getAnnotation(Query.class);
-        if (Objects.nonNull(query)) {
-            args.set(index, null);
-            return true;
+        if (Objects.isNull(query)) {
+            return false;
         }
-        return false;
+
+        Class<?>[] value = query.value();
+        Class<?>[] with = query.with();
+        Class<?>[] without = query.without();
+
+        var all = Arrays.stream(Objects.requireNonNull(app.table).getRowArray(entityId))
+            .filter(Objects::nonNull)
+            .map(Object::getClass)
+            .collect(Collectors.toList());
+
+        Set<Class<?>> shouldExsits = new HashSet<>() {{
+            addAll(Arrays.asList(value));
+            addAll(Arrays.asList(with));
+        }};
+
+        
+
+        for (Class<?> withClass : shouldExsits) {
+            if (!all.contains(withClass)) {
+                return false;
+            }
+        }
+
+        for (Class<?> withoutClass : without) {
+            if (all.contains(withoutClass)) {
+                return false;
+            }
+        }
+
+        List<Object> components = new ArrayList<>() {{
+            for (Class<?> valueClass : value) {
+                add(app.getComponent(entityId, valueClass));
+            }
+        }};
+        
+        args.set(index, components);  
+
+        return true;
     }
 
     private boolean matchEntity(List<Object> args, Parameter param, int argIndex, App app, Long entityId) {

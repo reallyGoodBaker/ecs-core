@@ -3,8 +3,6 @@ package top.rgb39.ecs.executor;
 import java.util.HashMap;
 import java.util.Map;
 import top.rgb39.ecs.arch.App;
-import top.rgb39.ecs.util.Logger;
-import top.rgb39.ecs.util.Logger.FontColors;
 
 public class RuntimeChain {
     private Map<String, SystemChain> sysChains = new HashMap<>();
@@ -31,18 +29,12 @@ public class RuntimeChain {
     }
 
     public void scheduleOnce(App app) {
-        Logger.info("tick",FontColors.CYAN,  "schedule start");
-        
-        int index = 0;
         String[] scheduleSeq = getScheduleSequence();
-        while (index < scheduleSeq.length) {
-            currentSchedule = scheduleSeq[index];
-            SystemChain sysChain = this.sysChains.get(scheduleSeq[index]);
+        for (int i = 0; i < scheduleSeq.length; i++) {
+            currentSchedule = scheduleSeq[i];
+            SystemChain sysChain = this.sysChains.get(scheduleSeq[i]);
             sysChain.run(app);
-            index++;
         }
-
-        Logger.info("tick",FontColors.YELLOW,  "schedule end");
     }
 
     public String current() {

@@ -80,7 +80,7 @@ public class Table {
     public Object[] getRowArray(long rowId) {
         Row row = getRow(rowId);
         if (Objects.isNull(row)) {
-            return null;
+            return new Object[0];
         }
         return row.getRow();
     }
