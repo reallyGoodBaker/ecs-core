@@ -9,12 +9,11 @@ import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.annotation.Nullable;
-
 import top.rgb39.ecs.annotation.Component;
 import top.rgb39.ecs.component.ComponentFactory;
 import top.rgb39.ecs.executor.RuntimeLabel;
 import top.rgb39.ecs.executor.SystemChain;
+import top.rgb39.ecs.executor.SystemConfig;
 import top.rgb39.ecs.plugin.DefaultPlugins;
 import top.rgb39.ecs.plugin.Plugin;
 import top.rgb39.ecs.util.Lists;
@@ -22,7 +21,6 @@ import top.rgb39.ecs.util.Lists;
 public class App implements
     EntityManager, ComponentManager, ExecutorManager, SystemManager, PluginManager
 {
-    @Nullable
     public final Table table = new Table();
     public final List<Object> singletonComponents = new ArrayList<>();
     private final Map<Class<?>, Plugin> plugins = new HashMap<>();
@@ -110,6 +108,15 @@ public class App implements
         return this;
     }
 
+    @Override
+    public SystemManager addSystem(Method system, SystemConfig sysConfig) {
+        system.setAccessible(true);
+        SystemChain chain = runtimeManager.getSystemChain(sysConfig.runtimeLabel());
+        if (Objects.nonNull(chain)) {
+            chain.addSystem(system, sysConfig);
+        }
+        return this;
+    }
 
     @Override
     public App addSystem(Method system, String label) {

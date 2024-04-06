@@ -1,6 +1,7 @@
 package test0;
 
-import java.util.List;
+import java.util.stream.Stream;
+
 import top.rgb39.ecs.annotation.Component;
 import top.rgb39.ecs.annotation.Entity;
 import top.rgb39.ecs.annotation.Read;
@@ -16,7 +17,7 @@ import top.rgb39.ecs.util.Logger;
 public class EventTest {
     public static void main(String[] args) {
         Logger.enableLogger(Logger.DEBUG);
-        Logger.enableLogger("tick");
+        // Logger.enableLogger("tick");
         App app = App.create("test0/EventTest.class");
 
         app.addEntity(0, new State())
@@ -30,6 +31,7 @@ public class EventTest {
         @Slot(State.class) State s
     ) {
         if (s.count % 100 == 0) {
+            Logger.DEBUG.i("write event.");
             writer.write(new MyEvent());
         }
     }
@@ -37,9 +39,13 @@ public class EventTest {
     @System
     void test2(
         @Entity long id,
-        @Read(MyEvent.class) List<MyEvent> events
+        @Read(MyEvent.class) Stream<MyEvent> events
     ) {
-        Logger.DEBUG.i("size: " + events.size());
+        events.forEach(ev -> Logger.DEBUG.i("recev event."));
+        // Logger.DEBUG.i(events.toString());
+        // if (events.count() > 0) {
+        //     Logger.DEBUG.i("recev event.");
+        // }
     }
 
     @System
@@ -47,6 +53,7 @@ public class EventTest {
         @Slot(State.class) State s
     ) {
         s.count++;
+        Logger.DEBUG.i("" + s.count);
     }
 }
 

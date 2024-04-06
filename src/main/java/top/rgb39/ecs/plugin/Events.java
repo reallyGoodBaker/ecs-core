@@ -2,29 +2,31 @@ package top.rgb39.ecs.plugin;
 
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
+import java.util.stream.Stream;
+
 import javax.annotation.Nullable;
 
 import top.rgb39.ecs.annotation.Read;
-import top.rgb39.ecs.annotation.System;
 import top.rgb39.ecs.annotation.Write;
 import top.rgb39.ecs.arch.App;
 import top.rgb39.ecs.arch.Event;
 import top.rgb39.ecs.executor.ParameterImplementor;
 import top.rgb39.ecs.executor.ParameterMatcher;
 import top.rgb39.ecs.executor.RuntimeLabel;
+import top.rgb39.ecs.executor.SystenInstanceRecord;
 
 public class Events implements Plugin, ParameterMatcher {
 
-    private static final List<Event> events = new Vector<>();
-    private static final List<Event> tempEvents = new Vector<>();
+    static final List<Event> events = new Vector<>();
+    static final List<Event> tempEvents = new Vector<>();
 
     @Override
     public void build(App app) {
         ParameterImplementor.registerMatcher(this);
+        SystenInstanceRecord.setInst(Events.class, this);
     }
 
     @Override
@@ -36,8 +38,7 @@ public class Events implements Plugin, ParameterMatcher {
         }
 
         if (Objects.nonNull(param.getAnnotation(Write.class))) {
-            matchWriter(args, argIndex, app);
-            return true;
+            return matchWriter(args, argIndex, app);
         }
 
         return false;
@@ -51,14 +52,14 @@ public class Events implements Plugin, ParameterMatcher {
         Class<?> ev = reader.value();
 
         if (Event.class.equals(ev)) {
-            Event[] evs = events.toArray(new Event[0]);
+            Stream<Object> evs = Arrays.stream(events.toArray());
 
             args.set(argIndex, evs);
             return true;
         }
 
-        Object[] evs = Arrays.stream(events.toArray(new Event[0]))
-                .filter(e -> e.getClass().equals(ev)).toArray();
+        Stream<Object> evs = Arrays.stream(events.toArray())
+                .filter(e -> e.getClass().equals(ev));
 
         args.set(argIndex, evs);
         return true;
@@ -69,33 +70,29 @@ public class Events implements Plugin, ParameterMatcher {
             return false;
         }
 
-        EventWriterImpl writer = new EventWriterImpl();
+        EventWriterImpl writer = new EventWriterImpl(tempEvents);
         args.set(argIndex, writer);
-        tempEvents.addAll(writer.fragments);
         return true;
     }
 
-    static class EventWriterImpl implements EventWriter {
-        final List<Event> fragments = new Vector<>();
+    static void fireEvents() {
+        if (tempEvents.size() > 0) {
+            events.addAll(tempEvents);
+        }
+
+        tempEvents.clear();
+    }
+
+    static void clearEvents() {
+        events.clear();
+    }
+
+    static record EventWriterImpl(List<Event> fragments) implements EventWriter {
 
         @Override
         public void write(Event event) {
             fragments.add(event);
         }
 
-    }
-
-    public static class EventSystems {
-
-        @System(runtimeLabel = RuntimeLabel.AfterEvent)
-        void copyEvents() {
-            Collections.copy(events, tempEvents);
-        }
-
-        @System(runtimeLabel = RuntimeLabel.AfterUpdate)
-        void clearEvents() {
-            tempEvents.clear();
-            events.clear();
-        }
     }
 }

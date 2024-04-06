@@ -11,5 +11,5 @@ import top.rgb39.ecs.executor.RuntimeLabel;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface System {
     String runtimeLabel() default RuntimeLabel.Update;
-    boolean asynchronous() default true;
+    boolean asynchronous() default false;
 }

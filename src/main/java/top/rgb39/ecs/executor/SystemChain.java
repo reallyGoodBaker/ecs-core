@@ -3,16 +3,19 @@ package top.rgb39.ecs.executor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+
 import top.rgb39.ecs.arch.App;
 import top.rgb39.ecs.arch.Row;
-import top.rgb39.ecs.arch.Table;
 import top.rgb39.ecs.util.Logger;
 import top.rgb39.ecs.util.Logger.FontColors;
 import top.rgb39.ecs.annotation.System;
 
 public class SystemChain {
+    private final static Map<Method, SystemConfig> configRecord = new ConcurrentHashMap<>();
     private List<Method> systems = new ArrayList<>();
 
     public void runWithOnlyReflects(App app) {
@@ -28,16 +31,23 @@ public class SystemChain {
     }
 
     public void run(App app) {
+        if (Objects.isNull(app.table)) {
+            return;
+        }
+
         for (Method system : this.systems) {
-            System sysAnnotaion = (System) system.getAnnotation(System.class);
-            if (Objects.isNull(sysAnnotaion) || Objects.isNull(app.table)) {
-                return;
+            SystemConfig sysConfig = configRecord.get(system);
+
+            if (Objects.isNull(sysConfig)) {
+                sysConfig = SystemConfig.from(system.getAnnotation(System.class));
+                configRecord.put(system, sysConfig);
             }
-            for (Row row : ((Table) Objects.requireNonNull(app.table)).getRows()) {
+            
+            for (Row row : app.table.getRows()) {
                 ParameterImplementor implementor = new ParameterImplementor(system.getParameters());
                 implementor.matchArguments(app, row.getRowId());
                 try {
-                    if (sysAnnotaion.asynchronous()) {
+                    if (sysConfig.asynchronous()) {
                         CompletableFuture.supplyAsync(() -> {
                             try {
                                 return implementor.invoke(SystenInstanceRecord.getInstance(system.getDeclaringClass()), system);
@@ -59,6 +69,11 @@ public class SystemChain {
 
     public void addSystem(Method system) {
         this.systems.add(system);
+    }
+
+    public void addSystem(Method system, SystemConfig sysConfig) {
+        this.systems.add(system);
+        configRecord.put(system, sysConfig);
     }
 
     public void removeSystem(Method system) {
