@@ -85,7 +85,7 @@ public class Events implements Plugin, ParameterMatcher {
 
     }
 
-    static class EventSystems {
+    public static class EventSystems {
 
         @System(runtimeLabel = RuntimeLabel.AfterEvent)
         void copyEvents() {
