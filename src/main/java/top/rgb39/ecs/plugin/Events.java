@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
+import java.util.stream.Collectors;
+
 import javax.annotation.Nullable;
 
 import top.rgb39.ecs.annotation.Read;
@@ -54,7 +56,7 @@ public class Events implements Plugin, ParameterMatcher {
 
         List<Event> evs = events.stream()
                 .filter(e -> e.getClass().equals(ev))
-                .toList();
+                .collect(Collectors.toList());
 
         args.set(argIndex, evs);
     }
