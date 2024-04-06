@@ -1,5 +1,7 @@
 package top.rgb39.ecs.arch;
 
+import javax.annotation.Nonnull;
+
 import top.rgb39.ecs.executor.RuntimeChain;
 import top.rgb39.ecs.executor.RuntimeSchedular;
 import top.rgb39.ecs.executor.SystemChain;
@@ -13,4 +15,5 @@ public interface RuntimeManager {
     SystemChain getSystemChain(String str);
     RuntimeManager setSystemChain(String str, SystemChain systemChain);
     String currentRuntimeLabel();
+    boolean isRuntimeLabel(@Nonnull String str);
 }

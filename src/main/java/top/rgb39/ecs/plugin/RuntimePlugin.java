@@ -4,6 +4,8 @@ import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.Nonnull;
+
 import top.rgb39.ecs.arch.App;
 import top.rgb39.ecs.arch.RuntimeManager;
 import top.rgb39.ecs.executor.RuntimeChain;
@@ -20,6 +22,7 @@ public class RuntimePlugin implements RuntimeManager, Plugin {
     public void build(App app) {
         SystemChain beforeUpdate = new SystemChain();
         SystemChain event = new SystemChain();
+        SystemChain afterEvent = new SystemChain();
         SystemChain update = new SystemChain();
         SystemChain afterUpdate = new SystemChain();
         SystemChain startup = new SystemChain();
@@ -27,8 +30,9 @@ public class RuntimePlugin implements RuntimeManager, Plugin {
         runtimeChain = new RuntimeChain() {
             @Override
             public String[] getScheduleSequence() {
-                return new String[]{
+                return new String[] {
                     RuntimeLabel.Event,
+                    RuntimeLabel.AfterEvent,
                     RuntimeLabel.BeforeUpdate,
                     RuntimeLabel.Update,
                     RuntimeLabel.AfterUpdate
@@ -37,6 +41,7 @@ public class RuntimePlugin implements RuntimeManager, Plugin {
         };
 
         runtimeChain.setSystemChain(RuntimeLabel.Event, event);
+        runtimeChain.setSystemChain(RuntimeLabel.AfterEvent, afterEvent);
         runtimeChain.setSystemChain(RuntimeLabel.BeforeUpdate, beforeUpdate);
         runtimeChain.setSystemChain(RuntimeLabel.Update, update);
         runtimeChain.setSystemChain(RuntimeLabel.AfterUpdate, afterUpdate);
@@ -118,6 +123,11 @@ public class RuntimePlugin implements RuntimeManager, Plugin {
     @Override
     public String currentRuntimeLabel() {
         return runtimeChain.current();
+    }
+
+    @Override
+    public boolean isRuntimeLabel(@Nonnull String str) {
+        return str.equals(runtimeChain.current());
     }
 
 }
