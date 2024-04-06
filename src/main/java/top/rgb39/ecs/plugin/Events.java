@@ -75,7 +75,7 @@ public class Events implements Plugin, ParameterMatcher {
         return true;
     }
 
-    private static class EventWriterImpl implements EventWriter {
+    static class EventWriterImpl implements EventWriter {
         final List<Event> fragments = new Vector<>();
 
         @Override
@@ -85,8 +85,7 @@ public class Events implements Plugin, ParameterMatcher {
 
     }
 
-    @SuppressWarnings("unused")
-    private static class EventSystems {
+    static class EventSystems {
 
         @System(runtimeLabel = RuntimeLabel.AfterEvent)
         void copyEvents() {
