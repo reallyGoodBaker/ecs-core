@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
-
+import java.util.Vector;
 import javax.annotation.Nullable;
 
 import top.rgb39.ecs.annotation.Read;
@@ -18,7 +17,7 @@ import top.rgb39.ecs.executor.ParameterMatcher;
 
 public class Events implements Plugin, ParameterMatcher {
 
-    private final List<Event> events = new CopyOnWriteArrayList<>();
+    private final List<Event> events = new Vector<>();
 
     @Override
     public void build(App app) {
