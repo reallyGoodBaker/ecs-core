@@ -16,6 +16,7 @@ import top.rgb39.ecs.arch.Event;
 import top.rgb39.ecs.executor.ParameterImplementor;
 import top.rgb39.ecs.executor.ParameterMatcher;
 import top.rgb39.ecs.executor.RuntimeLabel;
+import top.rgb39.ecs.executor.SystemConfig;
 import top.rgb39.ecs.executor.SystenInstanceRecord;
 
 public class Events implements Plugin, ParameterMatcher {
@@ -27,6 +28,16 @@ public class Events implements Plugin, ParameterMatcher {
     public void build(App app) {
         ParameterImplementor.registerMatcher(this);
         SystenInstanceRecord.setInst(Events.class, this);
+        try {
+            app.addSystem(
+                Events.class.getDeclaredMethod("fireEvents"),
+                new SystemConfig(RuntimeLabel.AfterEvent, false)
+            );
+            app.addSystem(
+                Events.class.getDeclaredMethod("clearEvents"),
+                new SystemConfig(RuntimeLabel.AfterUpdate, false)
+            );
+        } catch (Exception e) {}
     }
 
     @Override

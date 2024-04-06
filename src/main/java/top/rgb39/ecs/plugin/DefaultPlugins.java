@@ -24,7 +24,6 @@ public class DefaultPlugins implements Plugin {
             new ParameterMatchers(),
             new RuntimePlugin(),
             new Events(),
-            new EventSystem(),
             new SystemLoaderPlugin()
         );
     }
