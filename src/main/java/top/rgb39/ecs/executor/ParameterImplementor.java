@@ -41,7 +41,7 @@ public class ParameterImplementor {
     public ParameterImplementor matchArgumentsOnlyReflect(App app) {
         for (int i = 0; i < this.params.length; i++) {
             Parameter param = this.params[i];
-            matchReflects(args, param, i, app, null);
+            matchReflect(args, param, i, app, null);
         }
         return this;
     }
@@ -59,7 +59,7 @@ public class ParameterImplementor {
         return this;
     }
 
-    private boolean matchReflects(List<Object> args, Parameter param, int index, App app, @Nullable Long entityId) {
+    public static boolean matchReflect(List<Object> args, Parameter param, int index, App app, @Nullable Long entityId) {
         Reflect reflect = (Reflect) param.getAnnotation(Reflect.class);
         
         if (Objects.isNull(reflect)) {
@@ -77,7 +77,9 @@ public class ParameterImplementor {
         return false;
     }
 
-    private static final List<ParameterMatcher> matchers = new ArrayList<>();
+    private static final List<ParameterMatcher> matchers = new ArrayList<>() {{
+        add(ParameterImplementor::matchReflect);
+    }};
 
     public static void registerMatcher(ParameterMatcher matcher) {
         matchers.add(matcher);
