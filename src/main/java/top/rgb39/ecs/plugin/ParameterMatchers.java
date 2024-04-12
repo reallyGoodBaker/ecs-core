@@ -1,12 +1,12 @@
 package top.rgb39.ecs.plugin;
 
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Vector;
 import java.util.stream.Collectors;
 
 import top.rgb39.ecs.annotation.Entity;
@@ -60,7 +60,7 @@ public class ParameterMatchers implements Plugin {
             }
         }
 
-        List<Object> components = new ArrayList<>() {{
+        List<Object> components = new Vector<>() {{
             for (Class<?> valueClass : value) {
                 add(app.getComponent(entityId, valueClass));
             }

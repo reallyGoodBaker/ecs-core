@@ -62,4 +62,60 @@ public class Option<V> {
         return value == null ? Opt.NONE : Opt.SOME;
     }
 
+    private boolean matched = false;
+    private NoneCallback<?> noneCallback;
+    private SomeCallback<V, ?> someCallback;
+
+    public Object match(OptionMatcher<V, ?> matcher) {
+        if (matched) {
+            throw new IllegalStateException("Already matched");
+        }
+
+        matched = true;
+
+        matcher.match(
+            cb -> noneCallback = cb,
+            cb -> someCallback = cb
+        );
+
+        var returnVal = switch (state()) {
+            case NONE -> {
+                if (noneCallback == null) {
+                    throw new NullPointerException("No None callback set");
+                }
+
+                yield noneCallback.get();
+            }
+            case SOME -> {
+                if (someCallback == null) {
+                    throw new NullPointerException("No Some callback set");
+                }
+
+                yield someCallback.get(value);
+            }
+        };
+
+        return returnVal;
+    }
+
+    public interface OptionMatcher<V, R> {
+        void match(NoneCallbackSetter<R> setNone, SomeCallbackSetter<V, R> setSome);
+    }
+
+    public interface NoneCallback<R> {
+        R get();
+    }
+
+    public interface SomeCallback<V, R> {
+        R get(V value);
+    }
+
+    public interface NoneCallbackSetter<R> {
+        void then(NoneCallback<R> cb);
+    }
+
+    public interface SomeCallbackSetter<V, R> {
+        void then(SomeCallback<V, R> cb);
+    }
+
 }
