@@ -2,10 +2,16 @@ package top.rgb39.ecs.executor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
+import javax.annotation.Nullable;
+
 import top.rgb39.ecs.arch.App;
 
 public class RuntimeChain {
     private Map<String, SystemChain> sysChains = new HashMap<>();
+
+    @Nullable
     private String currentSchedule = null;
 
     public void setSystemChain(String runtimeLabel, SystemChain sysChain) {
@@ -28,16 +34,27 @@ public class RuntimeChain {
         return (String[]) this.sysChains.keySet().toArray(new String[0]);
     }
 
-    public void scheduleOnce(App app) {
-        String[] scheduleSeq = getScheduleSequence();
-        for (int i = 0; i < scheduleSeq.length; i++) {
-            currentSchedule = scheduleSeq[i];
-            SystemChain sysChain = this.sysChains.get(scheduleSeq[i]);
-            sysChain.run(app);
-        }
+    public CompletableFuture<?> scheduleOnce(App app) {
+        return CompletableFuture.runAsync(() -> {
+            String[] scheduleSeq = getScheduleSequence();
+            var futureList = new CompletableFuture[scheduleSeq.length];
+
+            for (int i = 0; i < scheduleSeq.length; i++) {
+                currentSchedule = scheduleSeq[i];
+                SystemChain sysChain = this.sysChains.get(scheduleSeq[i]);
+                futureList[i] = sysChain.run(app);
+            }
+
+            CompletableFuture.allOf(futureList).join();
+            currentSchedule = null;
+        });
     }
 
     public String current() {
         return currentSchedule;
+    }
+
+    public boolean idle() {
+        return currentSchedule == null;
     }
 }

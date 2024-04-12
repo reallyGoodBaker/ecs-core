@@ -23,17 +23,19 @@ public class SystemChain {
             ParameterImplementor implementor = new ParameterImplementor(method.getParameters());
             implementor.matchArgumentsOnlyReflect(app);
             try {
-                implementor.invoke(SystenInstanceRecord.getInstance(method.getDeclaringClass()), method);
+                implementor.invoke(SystemInstanceRecord.getInstance(method.getDeclaringClass()), method);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void run(App app) {
+    public CompletableFuture<?> run(App app) {
         if (Objects.isNull(app.table)) {
-            return;
+            return CompletableFuture.completedFuture(null);
         }
+
+        List<CompletableFuture<?>> futureList = new ArrayList<>();
 
         for (Method system : this.systems) {
             SystemConfig sysConfig = configRecord.get(system);
@@ -48,23 +50,26 @@ public class SystemChain {
                 implementor.matchArguments(app, row.getRowId());
                 try {
                     if (sysConfig.asynchronous()) {
-                        CompletableFuture.supplyAsync(() -> {
+                        var future = CompletableFuture.supplyAsync(() -> {
                             try {
-                                return implementor.invoke(SystenInstanceRecord.getInstance(system.getDeclaringClass()), system);
+                                return implementor.invoke(SystemInstanceRecord.getInstance(system.getDeclaringClass()), system);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 return null;
                             }
                         });
+
+                        futureList.add(future);
                     } else {
-                        implementor.invoke(SystenInstanceRecord.getInstance(system.getDeclaringClass()), system);
+                        implementor.invoke(SystemInstanceRecord.getInstance(system.getDeclaringClass()), system);
                     }
-                    Logger.info("tick", FontColors.GREEN, "system: " + system.getName());
                 } catch (Exception e) {
                     Logger.info("tick", FontColors.RED, "system failed: " + system.getName());
                 }
             }
         }
+
+        return CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0]));
     }
 
     public void addSystem(Method system) {

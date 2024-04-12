@@ -17,7 +17,7 @@ import top.rgb39.ecs.executor.ParameterImplementor;
 import top.rgb39.ecs.executor.ParameterMatcher;
 import top.rgb39.ecs.executor.RuntimeLabel;
 import top.rgb39.ecs.executor.SystemConfig;
-import top.rgb39.ecs.executor.SystenInstanceRecord;
+import top.rgb39.ecs.executor.SystemInstanceRecord;
 
 public class Events implements Plugin, ParameterMatcher {
 
@@ -27,7 +27,7 @@ public class Events implements Plugin, ParameterMatcher {
     @Override
     public void build(App app) {
         ParameterImplementor.registerMatcher(this);
-        SystenInstanceRecord.setInst(Events.class, this);
+        SystemInstanceRecord.setInst(Events.class, this);
         try {
             app.addSystem(
                 Events.class.getDeclaredMethod("fireEvents"),
