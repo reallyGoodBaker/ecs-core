@@ -3,19 +3,16 @@ package top.rgb39.ecs.executor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-
 import top.rgb39.ecs.arch.App;
 import top.rgb39.ecs.arch.Row;
 import top.rgb39.ecs.util.Logger;
 import top.rgb39.ecs.util.Logger.FontColors;
 import top.rgb39.ecs.annotation.System;
+import top.rgb39.ecs.util.Option;
 
 public class SystemChain {
-    private final static Map<Method, SystemConfig> configRecord = new ConcurrentHashMap<>();
     private List<Method> systems = new ArrayList<>();
 
     public void runWithOnlyReflects(App app) {
@@ -38,18 +35,28 @@ public class SystemChain {
         List<CompletableFuture<?>> futureList = new ArrayList<>();
 
         for (Method system : this.systems) {
-            SystemConfig sysConfig = configRecord.get(system);
+            var systemConfig = Option.it(SystemConfig.T);
 
-            if (Objects.isNull(sysConfig)) {
-                sysConfig = SystemConfig.from(system.getAnnotation(System.class));
-                configRecord.put(system, sysConfig);
+            switch (SystemRecord.getConfig(system).state(systemConfig)) {
+                case NONE -> {
+                    var it = Option.it(SystemConfig.T);
+
+                    switch (SystemConfig.from(system.getAnnotation(System.class)).state(it)) {
+                        case NONE -> { continue; }
+                        case SOME -> SystemRecord.record(system, it.v());
+                    }
+
+                    systemConfig = it;
+                }
+
+                default -> {}
             }
             
             for (Row row : app.table.getRows()) {
                 ParameterImplementor implementor = new ParameterImplementor(system.getParameters());
                 implementor.matchArguments(app, row.getRowId());
                 try {
-                    if (sysConfig.asynchronous()) {
+                    if (systemConfig.v().asynchronous()) {
                         var future = CompletableFuture.supplyAsync(() -> {
                             try {
                                 return implementor.invoke(SystemInstanceRecord.getInstance(system.getDeclaringClass()), system);
@@ -78,7 +85,7 @@ public class SystemChain {
 
     public void addSystem(Method system, SystemConfig sysConfig) {
         this.systems.add(system);
-        configRecord.put(system, sysConfig);
+        SystemRecord.record(system, sysConfig);
     }
 
     public void removeSystem(Method system) {

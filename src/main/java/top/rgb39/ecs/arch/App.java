@@ -14,6 +14,7 @@ import top.rgb39.ecs.component.ComponentFactory;
 import top.rgb39.ecs.executor.RuntimeLabel;
 import top.rgb39.ecs.executor.SystemChain;
 import top.rgb39.ecs.executor.SystemConfig;
+import top.rgb39.ecs.loader.InternalScanner;
 import top.rgb39.ecs.plugin.DefaultPlugins;
 import top.rgb39.ecs.plugin.Plugin;
 import top.rgb39.ecs.util.Lists;
@@ -177,6 +178,12 @@ public class App implements
     }
 
     public static App empty() {
+        try {
+            InternalScanner.scan("top/rgb39/ecs");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return new App();
     }
 
