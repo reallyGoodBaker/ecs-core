@@ -23,6 +23,11 @@ public class Events implements Plugin, ParameterMatcher {
 
     static final List<Event> events = new Vector<>();
     static final List<Event> tempEvents = new Vector<>();
+    static final EventWriter defaultEventWriter = new EventWriterImpl(tempEvents);
+
+    public static EventWriter getEventWriter() {
+        return defaultEventWriter;
+    }
 
     @Override
     public void build(App app) {
@@ -102,7 +107,9 @@ public class Events implements Plugin, ParameterMatcher {
 
         @Override
         public void write(Event event) {
-            fragments.add(event);
+            synchronized (fragments) {
+                fragments.add(event);
+            }
         }
 
     }
