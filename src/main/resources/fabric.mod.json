@@ -1,19 +1,19 @@
 {
-  "schemaVersion": 1,
-  "id": "ecs-core-fabric",
-  "version": "${version}",
-  "name": "ecs-core-fabric",
-  "description": "",
-  "authors": [],
-  "contact": {
-    "repo": "https://github.com/rgb/ecs-core-fabric"
-  },
-  "license": "All-Rights-Reserved",
-  "environment": "*",
-  "entrypoints": {},
-  "depends": {
-    "fabricloader": ">=${loader_version}",
-    "fabric": "*",
-    "minecraft": "${minecraft_version}"
-  }
+    "schemaVersion": 1,
+    "id": "ecs-core",
+    "version": "0.1.6",
+    "name": "ecs-core",
+    "description": "",
+    "authors": [],
+    "contact": {
+        "repo": "https://github.com/rgb/ecs-core"
+    },
+    "license": "All-Rights-Reserved",
+    "environment": "*",
+    "entrypoints": {},
+    "depends": {
+        "fabricloader": ">=0.15.11",
+        "fabric": "*",
+        "minecraft": "1.20.6"
+    }
 }
