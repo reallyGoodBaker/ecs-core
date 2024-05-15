@@ -18,6 +18,7 @@ public class ClassScanner implements Scanner {
         try {
             enums = cl.getResources(name);
         } catch (IOException e) {
+            Logger.ECS.e("ClassScanner: %s".formatted(e));
             return;
         }
 
@@ -27,7 +28,7 @@ public class ClassScanner implements Scanner {
             if ("jar".equals(url.getProtocol())) {
                 try {
                     JarScanner.scan(url);
-                } catch(Exception ignored) {}
+                } catch(Exception e) {}
                 continue;
             }
 
@@ -54,13 +55,13 @@ public class ClassScanner implements Scanner {
                             .replace(".class", "")
                             .replace("/", ".");
 
-                        java.lang.System.out.printf("Loading class %s\n", className);
+                        Logger.ECS.i("Loading class %s\n".formatted(className));
 
                         try {
                             Class<?> clz = cl.loadClass(className);
                             classes.put(clz.getName(), clz);
                         } catch (Exception e) {
-                            Logger.ECS.e("%s", e);
+                            Logger.ECS.e("ClassScanner: %s".formatted(e));
                         }
                     });
 
