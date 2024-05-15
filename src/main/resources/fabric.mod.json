@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "ecs-core-fabric",
+  "version": "${version}",
+  "name": "ecs-core-fabric",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/rgb/ecs-core-fabric"
+  },
+  "license": "All-Rights-Reserved",
+  "environment": "*",
+  "entrypoints": {},
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
