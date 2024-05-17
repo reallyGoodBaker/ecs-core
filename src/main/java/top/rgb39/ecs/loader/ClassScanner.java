@@ -55,7 +55,7 @@ public class ClassScanner implements Scanner {
                             .replace(".class", "")
                             .replace("/", ".");
 
-                        Logger.ECS.i("Loading class %s\n".formatted(className));
+                        Logger.ECS.i("Loading class %s".formatted(className));
 
                         try {
                             Class<?> clz = cl.loadClass(className);

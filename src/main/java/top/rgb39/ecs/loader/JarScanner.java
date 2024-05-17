@@ -21,7 +21,7 @@ public class JarScanner implements Scanner {
             if (!jarEntry.isDirectory() && jarEntryName.endsWith(".class") && !jarEntryName.contains("$") && !jarEntryName.contains("META-INF") && !jarEntryName.contains("module-info")) {
                 try {
                     var className = jarEntryName.replace("/", ".").replace(".class", "");
-                    Logger.ECS.i("Loading class %s\n", className);
+                    Logger.ECS.i("Loading class %s".formatted(className));
                     Class<?> cls = ucl.loadClass(className);
                     classes.put(cls.getName(), cls);
                 } catch (Exception e) {
