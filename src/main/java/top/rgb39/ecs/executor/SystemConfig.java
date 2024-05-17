@@ -2,7 +2,7 @@ package top.rgb39.ecs.executor;
 
 import top.rgb39.ecs.util.Option;
 import top.rgb39.ecs.util.Option.T;
-import top.rgb39.ecs.annotation.System;;
+import top.rgb39.ecs.annotation.System;
 
 public record SystemConfig(
     String runtimeLabel,
