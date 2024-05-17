@@ -6,7 +6,7 @@
 
     <groupId>top.rgb39.ecs</groupId>
     <artifactId>ecs-core</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.6</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -25,4 +25,6 @@
 
 
     </dependencies>
+
+    <useUniqueVersions>false</useUniqueVersions>
 </project>
