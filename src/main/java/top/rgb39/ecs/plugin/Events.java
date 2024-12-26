@@ -92,7 +92,7 @@ public class Events implements Plugin, ParameterMatcher {
     }
 
     static void fireEvents() {
-        if (tempEvents.size() > 0) {
+        if (!tempEvents.isEmpty()) {
             events.addAll(tempEvents);
         }
 

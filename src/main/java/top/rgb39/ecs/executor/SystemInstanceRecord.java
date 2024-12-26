@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class SystemInstanceRecord {
-    private static Map<Class<?>, Object> instRecord = new HashMap<>();
+    private static final Map<Class<?>, Object> instRecord = new HashMap<>();
 
     public static void setInst(Class<?> clazz, Object instance) {
         instRecord.put(clazz, instance);

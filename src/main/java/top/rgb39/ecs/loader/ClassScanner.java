@@ -28,7 +28,7 @@ public class ClassScanner implements Scanner {
             if ("jar".equals(url.getProtocol())) {
                 try {
                     JarScanner.scan(url);
-                } catch(Exception e) {}
+                } catch(Exception ignored) {}
                 continue;
             }
 

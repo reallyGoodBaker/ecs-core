@@ -25,7 +25,7 @@ public class SystemLoader {
                     }
                 }
 
-                Logger.ECS.i(Logger.light(32), "system added: " + Systems.getFullName(method) + " (" + sys.runtimeLabel() + ")", new Object[0]);
+                Logger.ECS.i(Logger.light(32), "system added: " + Systems.getFullName(method) + " (" + sys.runtimeLabel() + ")");
             }
         }
     }

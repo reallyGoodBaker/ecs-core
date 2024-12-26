@@ -39,7 +39,7 @@ public class ParameterMatchers implements Plugin {
         var all = Arrays.stream(Objects.requireNonNull(app.table).getRowArray(entityId))
             .filter(Objects::nonNull)
             .map(Object::getClass)
-            .collect(Collectors.toList());
+            .toList();
 
         Set<Class<?>> shouldExsits = new HashSet<>() {{
             addAll(Arrays.asList(value));
@@ -72,16 +72,16 @@ public class ParameterMatchers implements Plugin {
     }
 
     private boolean matchEntity(List<Object> args, Parameter param, int argIndex, App app, Long entityId) {
-        Entity entity = (Entity) param.getAnnotation(Entity.class);
+        Entity entity = param.getAnnotation(Entity.class);
         if (Objects.nonNull(entity)) {
-            args.set(argIndex, Long.valueOf(entityId));
+            args.set(argIndex, entityId);
             return true;
         }
         return false;
     }
 
     private boolean matchSlot(List<Object> args, Parameter param, int argIndex, App app, Long entityId) {
-        Slot slot = (Slot) param.getAnnotation(Slot.class);
+        Slot slot = param.getAnnotation(Slot.class);
         if (Objects.isNull(slot)) {
             return false;
         }

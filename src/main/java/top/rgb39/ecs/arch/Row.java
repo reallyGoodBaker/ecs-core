@@ -1,11 +1,13 @@
 package top.rgb39.ecs.arch;
 
+import top.rgb39.ecs.util.Types;
+
 import java.util.LinkedList;
 import java.util.List;
 
 public class Row {
-    private List<Object> row = new LinkedList<>();
-    private long rowId;
+    private final List<Object> row = new LinkedList<>();
+    private final long rowId;
 
     public Row(long rowId) {
         this.rowId = rowId;
@@ -31,9 +33,9 @@ public class Row {
         return true;
     }
 
-    public Object getCell(int index) {
+    public <T> T getCell(int index) {
         if (index > -1 && index < this.row.size()) {
-            return this.row.get(index);
+            return Types.cast(this.row.get(index));
         }
         return null;
     }

@@ -5,7 +5,7 @@ import top.rgb39.ecs.loader.ClassScanner;
 
 public class ClassScannerPlugin implements Plugin {
 
-    private String[] names;
+    private final String[] names;
 
     public ClassScannerPlugin(String... names) {
         this.names = names;

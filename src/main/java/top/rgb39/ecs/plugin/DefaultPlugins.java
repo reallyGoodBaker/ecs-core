@@ -4,7 +4,7 @@ import top.rgb39.ecs.arch.App;
 
 public class DefaultPlugins implements Plugin {
 
-    private String[] names;
+    private final String[] names;
 
     public DefaultPlugins(String... names) {
         this.names = names;

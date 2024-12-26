@@ -10,12 +10,12 @@ import top.rgb39.ecs.arch.App;
 import top.rgb39.ecs.arch.RuntimeManager;
 import top.rgb39.ecs.executor.RuntimeChain;
 import top.rgb39.ecs.executor.RuntimeLabel;
-import top.rgb39.ecs.executor.RuntimeSchedular;
+import top.rgb39.ecs.executor.RuntimeScheduler;
 import top.rgb39.ecs.executor.SystemChain;
 
 public class RuntimePlugin implements RuntimeManager, Plugin {
 
-    private RuntimeSchedular schedular;
+    private RuntimeScheduler scheduler;
     private RuntimeChain runtimeChain;
 
     @Override
@@ -53,22 +53,22 @@ public class RuntimePlugin implements RuntimeManager, Plugin {
     }
 
     @Override
-    public RuntimeManager setScheduler(RuntimeSchedular schedular) {
-        this.schedular = schedular;
+    public RuntimeManager setScheduler(RuntimeScheduler schedular) {
+        this.scheduler = schedular;
         return this;
     }
 
     @Override
     public void run(App app) {
-        if (Objects.nonNull(this.schedular)) {
-            this.schedular.schedule(this.runtimeChain, app);
+        if (Objects.nonNull(this.scheduler)) {
+            this.scheduler.schedule(this.runtimeChain, app);
         }
     }
 
     @Override
     public void stop() {
-        if (Objects.nonNull(this.schedular)) {
-            this.schedular.cancel();
+        if (Objects.nonNull(this.scheduler)) {
+            this.scheduler.cancel();
         }
     }
 
@@ -96,7 +96,7 @@ public class RuntimePlugin implements RuntimeManager, Plugin {
         return this;
     }
 
-    public static class DefaultRuntimeScheduler implements RuntimeSchedular {
+    public static class DefaultRuntimeScheduler implements RuntimeScheduler {
         TimerTask task;
 
         private DefaultRuntimeScheduler() {}

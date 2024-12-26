@@ -8,7 +8,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class InternalScanner implements Scanner {
-    private static ClassLoader cl = InternalScanner.class.getClassLoader();
+    private static final ClassLoader cl = InternalScanner.class.getClassLoader();
 
     public static void scan(String name) throws Exception {
         Enumeration<URL> urls = cl.getResources(name);
@@ -29,7 +29,6 @@ public class InternalScanner implements Scanner {
                         classes.put(clazz.getName(), clazz);
                     }
                 }
-                continue;
             }
         }
     }

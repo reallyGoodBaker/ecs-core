@@ -13,7 +13,7 @@ import top.rgb39.ecs.annotation.System;
 import top.rgb39.ecs.util.Option;
 
 public class SystemChain {
-    private List<Method> systems = new ArrayList<>();
+    private final List<Method> systems = new ArrayList<>();
 
     public void runWithOnlyReflects(App app) {
         for (Method method : this.systems) {
@@ -28,28 +28,22 @@ public class SystemChain {
     }
 
     public CompletableFuture<?> run(App app) {
-        if (Objects.isNull(app.table)) {
-            return CompletableFuture.completedFuture(null);
-        }
-
-        List<CompletableFuture<?>> futureList = new ArrayList<>();
+        var futureList = new ArrayList<CompletableFuture<?>>();
 
         for (Method system : this.systems) {
             var systemConfig = Option.it(SystemConfig.T);
 
-            switch (SystemRecord.getConfig(system).state(systemConfig)) {
-                case NONE -> {
-                    var it = Option.it(SystemConfig.T);
+            if (Objects.requireNonNull(SystemRecord.getConfig(system).state(systemConfig)) == Option.Opt.NONE) {
+                var it = Option.it(SystemConfig.T);
 
-                    switch (SystemConfig.from(system.getAnnotation(System.class)).state(it)) {
-                        case NONE -> { continue; }
-                        case SOME -> SystemRecord.record(system, it.v());
+                switch (SystemConfig.from(system.getAnnotation(System.class)).state(it)) {
+                    case NONE -> {
+                        continue;
                     }
-
-                    systemConfig = it;
+                    case SOME -> SystemRecord.record(system, it.v());
                 }
 
-                default -> {}
+                systemConfig = it;
             }
             
             for (Row row : app.table.getRows()) {

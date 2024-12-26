@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import top.rgb39.ecs.arch.App;
 
 public class RuntimeChain {
-    private Map<String, SystemChain> sysChains = new HashMap<>();
+    private final Map<String, SystemChain> sysChains = new HashMap<>();
 
     @Nullable
     private String currentSchedule = null;

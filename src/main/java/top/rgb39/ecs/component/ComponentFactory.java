@@ -5,19 +5,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import top.rgb39.ecs.annotation.Component;
+import top.rgb39.ecs.util.Types;
 
 public class ComponentFactory {
-    private static Map<Class<?>, Object> singletons = new HashMap<>();
+    private static final Map<Class<?>, Object> singletons = new HashMap<>();
 
-    public static Object getComponent(Class<?> componentClass) {
-        Component annotation = (Component) componentClass.getAnnotation(Component.class);
+    public static <T> T getComponent(Class<T> componentClass) {
+        Component annotation = componentClass.getAnnotation(Component.class);
         if (Objects.isNull(annotation)) {
             return null;
         }
         if (annotation.singleton()) {
-            return getSingletonComponent(componentClass);
+            return Types.cast(getSingletonComponent(componentClass));
         }
-        return getNormalComponent(componentClass);
+        return Types.cast(getNormalComponent(componentClass));
     }
 
     private static Object getNormalComponent(Class<?> componentClass) {

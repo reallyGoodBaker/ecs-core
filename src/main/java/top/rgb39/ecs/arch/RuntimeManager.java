@@ -3,11 +3,11 @@ package top.rgb39.ecs.arch;
 import javax.annotation.Nonnull;
 
 import top.rgb39.ecs.executor.RuntimeChain;
-import top.rgb39.ecs.executor.RuntimeSchedular;
+import top.rgb39.ecs.executor.RuntimeScheduler;
 import top.rgb39.ecs.executor.SystemChain;
 
 public interface RuntimeManager {
-    RuntimeManager setScheduler(RuntimeSchedular runtimeSchedular);
+    RuntimeManager setScheduler(RuntimeScheduler runtimeScheduler);
     void run(App app);
     void stop();
     RuntimeManager setRuntimeChain(RuntimeChain runtimeChain);

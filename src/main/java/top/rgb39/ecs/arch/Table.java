@@ -7,8 +7,8 @@ import top.rgb39.ecs.annotation.Component;
 import top.rgb39.ecs.util.Lists;
 
 public class Table {
-    private List<Class<?>> headers = new LinkedList<>();
-    private List<Row> table = new LinkedList<>();
+    private final List<Class<?>> headers = new LinkedList<>();
+    private final List<Row> table = new LinkedList<>();
 
     public Row createRow(long rowId) {
         Row row = new Row(rowId);
@@ -18,7 +18,7 @@ public class Table {
     }
 
     public boolean createColumn(Class<?> cls) {
-        Component anno = (Component) cls.getAnnotation(Component.class);
+        Component anno = cls.getAnnotation(Component.class);
         if (Objects.nonNull(anno) && !anno.singleton()) {
             this.headers.add(cls);
             for (Row row : this.table) {
@@ -30,9 +30,7 @@ public class Table {
     }
 
     public void deleteRow(long rowId) {
-        this.table.removeIf(row -> {
-            return row.getRowId() == rowId;
-        });
+        this.table.removeIf(row -> row.getRowId() == rowId);
     }
 
     public void deleteColumn(Class<?> cls) {
@@ -64,7 +62,7 @@ public class Table {
         }
     }
 
-    public Object getCell(Class<?> cls, long rowId) {
+    public <T> T getCell(Class<T> cls, long rowId) {
         Row row = reachCell(cls, rowId);
         if (Objects.isNull(row)) {
             return null;
@@ -86,9 +84,7 @@ public class Table {
     }
 
     public Row getRow(long rowId) {
-        return (Row) Lists.find(this.table, r -> {
-            return r.getRowId() == rowId;
-        });
+        return Lists.find(this.table, r -> r.getRowId() == rowId);
     }
 
     public int getColumn(Class<?> cls) {

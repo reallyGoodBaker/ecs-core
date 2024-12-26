@@ -26,15 +26,13 @@ public class MainScanner implements Scanner {
                 e.printStackTrace();
                 return null;
             }
-        }).filter((v0) -> {
-            return Objects.nonNull(v0);
-        }).toList();
+        }).filter(Objects::nonNull).toList();
         for (URL file : files) {
             if (file.getPath().endsWith(".class")) {
                 ClassFileScanner.scan(file);
             }
             if (file.getPath().endsWith(".jar")) {
-                JarScanner.scan(URI.create("jar: " + file.toString() + "!/").toURL());
+                JarScanner.scan(URI.create("jar: " + file + "!/").toURL());
             }
         }
     }

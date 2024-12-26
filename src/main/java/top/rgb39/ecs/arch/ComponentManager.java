@@ -5,9 +5,9 @@ public interface ComponentManager {
 
     Object[] getSingletonComponents();
 
-    Object getComponent(long j, Class<?> cls);
+    <T> T getComponent(long j, Class<T> cls);
 
-    Object getSingletonComponent(Class<?> cls);
+    <T> T getSingletonComponent(Class<T> cls);
 
     ComponentManager addComponent(long j, Object obj);
 

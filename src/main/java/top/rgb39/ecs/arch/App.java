@@ -18,6 +18,7 @@ import top.rgb39.ecs.loader.InternalScanner;
 import top.rgb39.ecs.plugin.DefaultPlugins;
 import top.rgb39.ecs.plugin.Plugin;
 import top.rgb39.ecs.util.Lists;
+import top.rgb39.ecs.util.Types;
 
 public class App implements
     EntityManager, ComponentManager, ExecutorManager, SystemManager, PluginManager
@@ -30,25 +31,25 @@ public class App implements
     @Override
     public App addEntity(long entityId, Object... components) {
         if (components.length < 1) {
-            ((Table) Objects.requireNonNull(this.table)).createRow(entityId);
+            Objects.requireNonNull(this.table).createRow(entityId);
             return this;
         }
 
         for (Object obj : components) {
-            ((Table) Objects.requireNonNull(this.table)).setCell(obj.getClass(), entityId, obj);
+            Objects.requireNonNull(this.table).setCell(obj.getClass(), entityId, obj);
         }
         return this;
     }
 
     @Override
     public App removeEntity(long entityId) {
-        ((Table) Objects.requireNonNull(this.table)).deleteRow(entityId);
+        Objects.requireNonNull(this.table).deleteRow(entityId);
         return this;
     }
 
     @Override
     public Object[] getComponents(long entityId) {
-        return ((Table) Objects.requireNonNull(this.table)).getRowArray(entityId);
+        return Objects.requireNonNull(this.table).getRowArray(entityId);
     }
 
     @Override
@@ -57,21 +58,19 @@ public class App implements
     }
 
     @Override
-    public Object getComponent(long entityId, Class<?> componentClass) {
-        Object component = ((Table) Objects.requireNonNull(this.table)).getCell(componentClass, entityId);
+    public <T> T getComponent(long entityId, Class<T> componentClass) {
+        T component = Objects.requireNonNull(this.table).getCell(componentClass, entityId);
         if (Objects.nonNull(component)) {
             return component;
         }
         Object component2 = ComponentFactory.getComponent(componentClass);
-        ((Table) Objects.requireNonNull(this.table)).setCell(componentClass, entityId, component2);
-        return component2;
+        Objects.requireNonNull(this.table).setCell(componentClass, entityId, component2);
+        return Types.cast(component2);
     }
 
     @Override
-    public Object getSingletonComponent(Class<?> componentClass) {
-        Object component = Lists.find(singletonComponents, c -> {
-            return c.getClass().equals(componentClass);
-        });
+    public <T> T getSingletonComponent(Class<T> componentClass) {
+        T component = Lists.find(Types.cast(singletonComponents), c -> c.getClass().equals(componentClass));
         if (Objects.nonNull(component)) {
             return component;
         }
@@ -79,7 +78,7 @@ public class App implements
         if (Objects.nonNull(component2)) {
             singletonComponents.add(component2);
         }
-        return component2;
+        return Types.cast(component2);
     }
 
     @Override
@@ -100,9 +99,7 @@ public class App implements
 
     @Override
     public App removeSingletonComponent(Class<?> componentClass) {
-        Object component = Lists.find(this.singletonComponents, c -> {
-            return c.getClass().equals(componentClass);
-        });
+        Object component = Lists.find(this.singletonComponents, c -> c.getClass().equals(componentClass));
         if (Objects.nonNull(component)) {
             singletonComponents.remove(component);
         }
@@ -238,9 +235,7 @@ public class App implements
     @Override
     public boolean pluginsReady() {
         return plugins.values()
-            .stream()
-            .filter(plugin -> !plugin.ready())
-            .count() < 1l;
+                .stream().allMatch(Plugin::ready);
     }
 
     @Override
@@ -266,7 +261,7 @@ public class App implements
                     cancel();
                 }
             }
-        }, 0l, 500l);
+        }, 0L, 500L);
     }
 
     @Override
